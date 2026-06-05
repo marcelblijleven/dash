@@ -1,0 +1,13 @@
+# -- Widgets
+#
+# Widgets to include in the dashboard, order of widgets here determine
+# the order of widgets on the dashboard.
+#
+# Built-in widget types:
+#   host-stats          combined uptime, load, memory and CPU stats
+#
+# Sizes: small (1 col), medium (2 cols), large (3 cols or full row).
+widgets:
+  - type: host-stats
+    size: medium
+

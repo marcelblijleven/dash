@@ -1,14 +1,13 @@
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function WidgetCard({
   title,
   hint,
   children,
 }: {
-  title: string
-  hint?: React.ReactNode
-  children: React.ReactNode
+  title: string;
+  hint?: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <Card className="h-full">
@@ -18,5 +17,5 @@ export function WidgetCard({
       </CardHeader>
       <CardContent>{children}</CardContent>
     </Card>
-  )
+  );
 }

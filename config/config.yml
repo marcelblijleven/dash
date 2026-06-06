@@ -1,0 +1,3 @@
+widgets:
+  - type: host-stats
+    size: medium

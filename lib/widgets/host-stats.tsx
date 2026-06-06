@@ -1,5 +1,5 @@
-import { WidgetCard } from "@/components/widget-card"
-import { WidgetConfig } from "@/lib/config"
+import { WidgetCard } from "@/components/widget-card";
+import type { WidgetConfig } from "@/lib/config/schema";
 
 export async function HostStatsWidget({ config }: { config: WidgetConfig }) {
   const initial = {
@@ -8,11 +8,11 @@ export async function HostStatsWidget({ config }: { config: WidgetConfig }) {
     memTotal: 0,
     memAvailable: 0,
     ncpu: 0,
-  }
+  };
 
   return (
-    <WidgetCard title={config.title ?? 'Host'}>
-      <>{initial}</>
+    <WidgetCard title={config.title ?? "Host"}>
+      {JSON.stringify(initial)}
     </WidgetCard>
-  )
+  );
 }

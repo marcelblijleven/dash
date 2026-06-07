@@ -16,9 +16,8 @@ function procRoot() {
   );
 }
 
-async function readProc(name: ProcName): Promise<string> {
+export async function readProc(name: ProcName): Promise<string> {
   const root = procRoot();
-  console.log(root);
   try {
     return await readFile(`${root}/${name}`, "utf8");
   } catch {

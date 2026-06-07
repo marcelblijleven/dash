@@ -1,3 +1,11 @@
 widgets:
   - type: host-stats
     size: medium
+
+  - type: host-chart
+    metric: load # load | memory
+    size: large
+
+  - type: host-chart
+    metric: memory # load | memory
+    size: large

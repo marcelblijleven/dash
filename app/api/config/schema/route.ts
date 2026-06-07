@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { configJsonSchema } from "@/lib/config";
+import { configJsonSchema } from "@/lib/config/schema";
 
 export async function GET() {
   return NextResponse.json(configJsonSchema(), {

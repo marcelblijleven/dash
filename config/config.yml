@@ -9,3 +9,10 @@ widgets:
   - type: host-chart
     metric: memory # load | memory
     size: large
+
+  - type: host-stat-uptime
+    size: small
+  - type: host-stat-load
+    size: small
+  - type: host-stat-memory
+    size: small

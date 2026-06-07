@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { RelativeTime } from "@/components/relative-time";
 import { Sparkline } from "@/components/sparkline";
 import { StatCard } from "@/components/stat-card";
 import { formatBytes, formatUptime } from "@/lib/utils";
 import type { HostStatsData } from "../host-stats/host-stats-live";
-
-const POLL_MS = 5000;
+import { useHostStats } from "../host-stats/use-host-stats";
 
 export type HostField = "uptime" | "memory" | "load" | "cpus";
 
@@ -20,41 +18,7 @@ export function HostStatCard({
   title: string;
   initial: HostStatsData;
 }) {
-  const [data, setData] = useState(initial);
-  const [updatedAt, setUpdatedAt] = useState<number | null>(() => Date.now());
-  const [stale, setStale] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    let inFlight = false;
-
-    async function tick() {
-      if (inFlight) return;
-      inFlight = true;
-      try {
-        const res = await fetch("/api/widgets/host-stats", {
-          cache: "no-store",
-        });
-        if (!cancelled && res.ok) {
-          setData(await res.json());
-          setUpdatedAt(Date.now());
-          setStale(false);
-        } else if (!cancelled) {
-          setStale(true);
-        }
-      } catch {
-        if (!cancelled) setStale(true);
-      } finally {
-        inFlight = false;
-      }
-    }
-
-    const id = setInterval(tick, POLL_MS);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
-  }, []);
+  const { data, stale, updatedAt } = useHostStats(initial);
 
   const view = render(field, data);
   const hint = stale ? (

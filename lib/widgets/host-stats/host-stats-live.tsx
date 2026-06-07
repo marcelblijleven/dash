@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { RelativeTime } from "@/components/relative-time";
 import { formatBytes, formatUptime } from "@/lib/utils";
+import { useHostStats } from "./use-host-stats";
 
 export type HostStatsData = {
   uptime: number | null;
@@ -19,44 +19,8 @@ export type HostStatsData = {
   }[];
 };
 
-const POLL_MS = 5000;
-
 export function HostStatsLive({ initial }: { initial: HostStatsData }) {
-  const [stats, setStats] = useState(initial);
-  const [stale, setStale] = useState(false);
-  const [updatedAt, setUpdatedAt] = useState<number | null>(() => Date.now());
-
-  useEffect(() => {
-    let cancelled = false;
-    let inFlight = false;
-
-    async function tick() {
-      if (inFlight) return;
-      inFlight = true;
-      try {
-        const res = await fetch("/api/widgets/host-stats", {
-          cache: "no-store",
-        });
-        if (!cancelled && res.ok) {
-          setStats(await res.json());
-          setUpdatedAt(Date.now());
-          setStale(false);
-        } else if (!cancelled) {
-          setStale(true);
-        }
-      } catch {
-        if (!cancelled) setStale(true);
-      } finally {
-        inFlight = false;
-      }
-    }
-
-    const id = setInterval(tick, POLL_MS);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
-  }, []);
+  const { data: stats, stale, updatedAt } = useHostStats(initial);
 
   return (
     <div className="space-y-2">

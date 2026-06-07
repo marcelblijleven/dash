@@ -1,28 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { RelativeTime } from "@/components/relative-time";
 import { WidgetCard } from "@/components/widget-card";
 import { formatBytes } from "@/lib/utils";
-
-const POLL_MS = 5000;
+import type { HostStatsData } from "../host-stats/host-stats-live";
+import { useHostStats } from "../host-stats/use-host-stats";
 
 export type HostChartMetric = "load" | "memory";
 
-type Sample = {
-  t: number;
-  loadAvg: [number, number, number] | null;
-  memUsed: number | null;
-  memTotal: number | null;
-};
-
-type Data = {
-  loadAvg: [number, number, number] | null;
-  memTotal: number | null;
-  memAvailable: number | null;
-  ncpu: number | null;
-  samples: Sample[];
-};
+type Sample = NonNullable<HostStatsData["samples"]>[number];
 
 export function HostChartLive({
   metric,
@@ -31,46 +17,11 @@ export function HostChartLive({
 }: {
   metric: HostChartMetric;
   title: string;
-  initial: Data;
+  initial: HostStatsData;
 }) {
-  const [data, setData] = useState<Data>(initial);
-  const [updatedAt, setUpdatedAt] = useState<number | null>(() => Date.now());
-  const [stale, setStale] = useState(false);
+  const { data, stale, updatedAt } = useHostStats(initial);
 
-  useEffect(() => {
-    let cancelled = false;
-    let inFlight = false;
-
-    async function tick() {
-      if (inFlight) return;
-      inFlight = true;
-      try {
-        const res = await fetch("/api/widgets/host-stats", {
-          cache: "no-store",
-        });
-
-        if (!cancelled && res.ok) {
-          setData(await res.json());
-          setUpdatedAt(Date.now());
-          setStale(false);
-        } else if (!cancelled) {
-          setStale(true);
-        }
-      } catch {
-        if (!cancelled) setStale(true);
-      } finally {
-        inFlight = false;
-      }
-    }
-
-    const id = setInterval(tick, POLL_MS);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
-  }, []);
-
-  const series = extractSeries(metric, data.samples);
+  const series = extractSeries(metric, data.samples ?? []);
   const current = currentValue(metric, data);
   const formatY =
     metric === "memory" ? formatBytes : (v: number) => v.toFixed(2);
@@ -105,7 +56,7 @@ function extractSeries(metric: HostChartMetric, samples: Sample[]): number[] {
     .filter((v): v is number => v !== undefined && v !== null);
 }
 
-function currentValue(metric: HostChartMetric, d: Data): string {
+function currentValue(metric: HostChartMetric, d: HostStatsData): string {
   if (metric === "memory") {
     return d.memTotal !== null && d.memAvailable !== null
       ? formatBytes(d.memTotal - d.memAvailable)

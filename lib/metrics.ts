@@ -17,9 +17,8 @@ declare global {
 }
 
 // TODO: maybe but this in a database?
-const samples = globalThis.__dashHostSamples
-  ? globalThis.__dashHostSamples
-  : [];
+globalThis.__dashHostSamples ??= [];
+const samples = globalThis.__dashHostSamples;
 
 async function tick(): Promise<void> {
   try {

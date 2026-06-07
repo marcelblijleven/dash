@@ -48,6 +48,7 @@ export function HostChartLive({
         const res = await fetch("/api/widgets/host-stats", {
           cache: "no-store",
         });
+
         if (!cancelled && res.ok) {
           setData(await res.json());
           setUpdatedAt(Date.now());

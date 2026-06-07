@@ -19,6 +19,7 @@ export async function HostChartWidget({ config }: { config: HostChartConfig }) {
         config.title ?? (metric === "memory" ? "Host memory" : "Host load")
       }
       initial={{
+        uptime: host?.uptime ?? null,
         loadAvg: host?.loadAvg ?? null,
         memTotal: host?.memTotal ?? null,
         memAvailable: host?.memAvailable ?? null,

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getHostStats } from "@/lib/host";
+import { getHostSamples } from "@/lib/metrics";
 
 export const dynamic = "force-dynamic";
 
@@ -12,5 +13,6 @@ export async function GET() {
     memTotal: host?.memTotal ?? null,
     memAvailable: host?.memAvailable ?? null,
     ncpu: null, // TODO: get from docker>
+    samples: getHostSamples(),
   });
 }

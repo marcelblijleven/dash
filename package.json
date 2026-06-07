@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "DASH_CONFIG=./config/config.yml DASH_PROC_ROOT=.dev/proc next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "pnpx @biomejs/biome lint",
+    "lint:fix": "pnpx @biomejs/biome lint --write",
+    "format": "pnpx @biomejs/biome format",
+    "format:fix": "pnpx @biomejs/biome format --write"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

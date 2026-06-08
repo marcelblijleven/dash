@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ConfigErrorBanner } from "@/components/config-error-banner";
 import { SiteHeader } from "@/components/site-nav";
 
 export const metadata: Metadata = {
@@ -21,7 +22,10 @@ export default function RootLayout({
 
       <body className="min-h-dvh">
         <SiteHeader />
-        <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-6 py-8">
+          <ConfigErrorBanner />
+          {children}
+        </main>
       </body>
     </html>
   );

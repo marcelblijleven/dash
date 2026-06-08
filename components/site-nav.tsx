@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader() {
   return (
@@ -14,7 +15,7 @@ export function SiteHeader() {
           </Link>
         </div>
         <div className="flex items-center gap-2 text-sm">
-          {/* TODO: place menu items here?  */}
+          <ThemeToggle />
         </div>
       </div>
     </header>

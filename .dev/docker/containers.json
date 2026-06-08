@@ -1,0 +1,458 @@
+[
+  {
+    "Id": "a1b2c3d4e5f60000000000000000000000000000000000000000000000000001",
+    "Names": [
+      "/traefik"
+    ],
+    "Image": "traefik:latest",
+    "ImageID": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "Command": "/entrypoint.sh traefik",
+    "Created": 1780771626,
+    "Ports": [
+      {
+        "IP": "0.0.0.0",
+        "PrivatePort": 443,
+        "PublicPort": 443,
+        "Type": "tcp"
+      },
+      {
+        "IP": "::",
+        "PrivatePort": 443,
+        "PublicPort": 443,
+        "Type": "tcp"
+      },
+      {
+        "IP": "0.0.0.0",
+        "PrivatePort": 80,
+        "PublicPort": 80,
+        "Type": "tcp"
+      },
+      {
+        "IP": "::",
+        "PrivatePort": 80,
+        "PublicPort": 80,
+        "Type": "tcp"
+      },
+      {
+        "IP": "0.0.0.0",
+        "PrivatePort": 8080,
+        "PublicPort": 8183,
+        "Type": "tcp"
+      },
+      {
+        "IP": "::",
+        "PrivatePort": 8080,
+        "PublicPort": 8183,
+        "Type": "tcp"
+      }
+    ],
+    "Labels": {
+      "net.unraid.docker.icon": "https://example.com/icons/traefik.png",
+      "net.unraid.docker.managed": "dockerman",
+      "net.unraid.docker.webui": "http://[IP]:[PORT:8080]/",
+      "org.opencontainers.image.description": "A modern reverse-proxy",
+      "org.opencontainers.image.documentation": "https://docs.traefik.io",
+      "org.opencontainers.image.source": "https://github.com/traefik/traefik",
+      "org.opencontainers.image.title": "Traefik",
+      "org.opencontainers.image.url": "https://traefik.io",
+      "org.opencontainers.image.vendor": "Traefik Labs",
+      "org.opencontainers.image.version": "v3.7.4",
+      "traefik.enable": "true",
+      "traefik.http.routers.api.entryPoints": "https",
+      "traefik.http.routers.api.rule": "Host(`traefik.example.com`)",
+      "traefik.http.routers.api.service": "api@internal"
+    },
+    "State": "running",
+    "Status": "Up 17 hours",
+    "HostConfig": {
+      "NetworkMode": "homelab-net"
+    },
+    "Health": {
+      "Status": "none",
+      "FailingStreak": 0
+    },
+    "NetworkSettings": {
+      "Networks": {
+        "homelab-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "0000000000000000000000000000000000000000000000000000000000000000",
+          "EndpointID": "1000000000000000000000000000000000000000000000000000000000000001",
+          "Gateway": "172.20.0.1",
+          "IPAddress": "172.20.0.3",
+          "MacAddress": "02:42:ac:14:00:03",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/mnt/user/appdata/traefik",
+        "Destination": "/etc/traefik",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/var/run/docker.sock",
+        "Destination": "/var/run/docker.sock",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  {
+    "Id": "a1b2c3d4e5f60000000000000000000000000000000000000000000000000002",
+    "Names": [
+      "/sonarr"
+    ],
+    "Image": "ghcr.io/hotio/sonarr:v4",
+    "ImageID": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "Command": "/init",
+    "Created": 1780666266,
+    "Ports": [
+      {
+        "IP": "0.0.0.0",
+        "PrivatePort": 8989,
+        "PublicPort": 8989,
+        "Type": "tcp"
+      },
+      {
+        "IP": "::",
+        "PrivatePort": 8989,
+        "PublicPort": 8989,
+        "Type": "tcp"
+      }
+    ],
+    "Labels": {
+      "dash.category": "arr",
+      "dash.icon": "sonarr",
+      "net.unraid.docker.icon": "https://example.com/icons/sonarr.png",
+      "net.unraid.docker.managed": "dockerman",
+      "net.unraid.docker.webui": "http://[IP]:[PORT:8989]",
+      "org.opencontainers.image.created": "2024-01-01T01:48:48Z",
+      "org.opencontainers.image.revision": "0000000000000000000000000000000000000000",
+      "org.opencontainers.image.source": "https://github.com/hotio/sonarr/tree/v4",
+      "org.opencontainers.image.title": "hotio/sonarr:v4",
+      "org.opencontainers.image.url": "https://github.com/hotio/sonarr/blob/master/README.md",
+      "org.opencontainers.image.vendor": "hotio",
+      "org.opencontainers.image.version": "4.0.0.748",
+      "traefik.enable": "true",
+      "traefik.http.routers.sonarr.entryPoints": "https",
+      "traefik.http.services.sonarr.loadbalancer.healthCheck.interval": "30s",
+      "traefik.http.services.sonarr.loadbalancer.healthCheck.path": "/ping",
+      "traefik.http.services.sonarr.loadbalancer.healthCheck.timeout": "5s",
+      "traefikX.http.routers.sonarr.middlewares": "authentik@docker"
+    },
+    "State": "running",
+    "Status": "Up 2 days",
+    "HostConfig": {
+      "NetworkMode": "homelab-net"
+    },
+    "Health": {
+      "Status": "none",
+      "FailingStreak": 0
+    },
+    "NetworkSettings": {
+      "Networks": {
+        "homelab-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "0000000000000000000000000000000000000000000000000000000000000000",
+          "EndpointID": "1000000000000000000000000000000000000000000000000000000000000002",
+          "Gateway": "172.20.0.1",
+          "IPAddress": "172.20.0.29",
+          "MacAddress": "02:42:ac:14:00:1d",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/mnt/user/appdata/sonarr",
+        "Destination": "/config",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/mnt/user/data",
+        "Destination": "/data",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  {
+    "Id": "a1b2c3d4e5f60000000000000000000000000000000000000000000000000003",
+    "Names": [
+      "/grafana"
+    ],
+    "Image": "grafana/grafana",
+    "ImageID": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "Command": "/run.sh",
+    "Created": 1780662773,
+    "Ports": [
+      {
+        "IP": "0.0.0.0",
+        "PrivatePort": 3000,
+        "PublicPort": 3000,
+        "Type": "tcp"
+      },
+      {
+        "IP": "::",
+        "PrivatePort": 3000,
+        "PublicPort": 3000,
+        "Type": "tcp"
+      }
+    ],
+    "Labels": {
+      "dash.category": "monitoring",
+      "dash.icon": "grafana",
+      "maintainer": "Grafana Labs <hello@grafana.com>",
+      "net.unraid.docker.icon": "https://example.com/icons/grafana.png",
+      "net.unraid.docker.managed": "dockerman",
+      "net.unraid.docker.webui": "http://[IP]:[PORT:3000]/",
+      "org.opencontainers.image.source": "https://github.com/grafana/grafana",
+      "traefik.enable": "true",
+      "traefik.http.routers.grafana.entryPoints": "https"
+    },
+    "State": "running",
+    "Status": "Up 2 days",
+    "HostConfig": {
+      "NetworkMode": "homelab-net"
+    },
+    "Health": {
+      "Status": "none",
+      "FailingStreak": 0
+    },
+    "NetworkSettings": {
+      "Networks": {
+        "homelab-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "0000000000000000000000000000000000000000000000000000000000000000",
+          "EndpointID": "1000000000000000000000000000000000000000000000000000000000000003",
+          "Gateway": "172.20.0.1",
+          "IPAddress": "172.20.0.23",
+          "MacAddress": "02:42:ac:14:00:17",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/mnt/user/appdata/grafana",
+        "Destination": "/var/lib/grafana",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  {
+    "Id": "a1b2c3d4e5f60000000000000000000000000000000000000000000000000004",
+    "Names": [
+      "/postgresql15"
+    ],
+    "Image": "postgres:15",
+    "ImageID": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+    "Command": "docker-entrypoint.sh postgres",
+    "Created": 1780061354,
+    "Ports": [
+      {
+        "IP": "0.0.0.0",
+        "PrivatePort": 5432,
+        "PublicPort": 5432,
+        "Type": "tcp"
+      },
+      {
+        "IP": "::",
+        "PrivatePort": 5432,
+        "PublicPort": 5432,
+        "Type": "tcp"
+      }
+    ],
+    "Labels": {
+      "net.unraid.docker.icon": "https://example.com/icons/postgres.png",
+      "net.unraid.docker.managed": "dockerman"
+    },
+    "State": "running",
+    "Status": "Up 2 days",
+    "HostConfig": {
+      "NetworkMode": "homelab-net"
+    },
+    "Health": {
+      "Status": "none",
+      "FailingStreak": 0
+    },
+    "NetworkSettings": {
+      "Networks": {
+        "homelab-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "0000000000000000000000000000000000000000000000000000000000000000",
+          "EndpointID": "1000000000000000000000000000000000000000000000000000000000000004",
+          "Gateway": "172.20.0.1",
+          "IPAddress": "172.20.0.8",
+          "MacAddress": "02:42:ac:14:00:08",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/mnt/cache/appdata/postgresql15",
+        "Destination": "/var/lib/postgresql/data",
+        "Mode": "rw",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  {
+    "Id": "a1b2c3d4e5f60000000000000000000000000000000000000000000000000005",
+    "Names": [
+      "/dash"
+    ],
+    "Image": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "ImageID": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "Command": "docker-entrypoint.sh node server.js",
+    "Created": 1780682073,
+    "Ports": [
+      {
+        "IP": "0.0.0.0",
+        "PrivatePort": 3000,
+        "PublicPort": 3400,
+        "Type": "tcp"
+      },
+      {
+        "IP": "::",
+        "PrivatePort": 3000,
+        "PublicPort": 3400,
+        "Type": "tcp"
+      }
+    ],
+    "Labels": {
+      "com.docker.compose.config-hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "com.docker.compose.container-number": "1",
+      "com.docker.compose.depends_on": "",
+      "com.docker.compose.image": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "com.docker.compose.oneoff": "False",
+      "com.docker.compose.project": "dash",
+      "com.docker.compose.project.config_files": "/mnt/appdata_pool/appdata/dash/compose.yaml,/mnt/appdata_pool/appdata/dash/compose.override.yaml",
+      "com.docker.compose.project.environment_file": "/mnt/appdata_pool/appdata/dash/.env",
+      "com.docker.compose.project.working_dir": "/mnt/appdata_pool/appdata/dash",
+      "com.docker.compose.replace": "dash",
+      "com.docker.compose.service": "dash",
+      "com.docker.compose.version": "5.1.2",
+      "net.unraid.docker.icon": "",
+      "net.unraid.docker.managed": "composeman",
+      "net.unraid.docker.shell": "/bin/sh",
+      "net.unraid.docker.webui": "http://[IP]:[PORT:3400]",
+      "org.opencontainers.image.created": "2026-06-05T14:14:09.466Z",
+      "org.opencontainers.image.description": "",
+      "org.opencontainers.image.licenses": "",
+      "org.opencontainers.image.revision": "0000000000000000000000000000000000000000",
+      "org.opencontainers.image.source": "https://github.com/example-user/dash",
+      "org.opencontainers.image.title": "dash",
+      "org.opencontainers.image.url": "https://github.com/example-user/dash",
+      "org.opencontainers.image.version": "main",
+      "traefik.enable": "true",
+      "traefik.http.routers.dash.entrypoints": "https",
+      "traefik.http.routers.dash.rule": "Host(`dash.example.com`)"
+    },
+    "State": "running",
+    "Status": "Up 2 days (healthy)",
+    "HostConfig": {
+      "NetworkMode": "homelab-net"
+    },
+    "Health": {
+      "Status": "healthy",
+      "FailingStreak": 0
+    },
+    "NetworkSettings": {
+      "Networks": {
+        "homelab-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "0000000000000000000000000000000000000000000000000000000000000000",
+          "EndpointID": "1000000000000000000000000000000000000000000000000000000000000005",
+          "Gateway": "172.20.0.1",
+          "IPAddress": "172.20.0.4",
+          "MacAddress": "02:42:ac:14:00:04",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [
+      {
+        "Type": "bind",
+        "Source": "/mnt/appdata_pool/appdata/dash/config",
+        "Destination": "/config",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/proc",
+        "Destination": "/host/proc",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/sys",
+        "Destination": "/host/sys",
+        "Mode": "ro",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ]
+  }
+]

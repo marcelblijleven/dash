@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ConfigErrorBanner } from "@/components/config-error-banner";
-import { SiteHeader } from "@/components/site-nav";
+import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
   title: "dash",

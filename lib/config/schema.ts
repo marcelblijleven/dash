@@ -23,7 +23,17 @@ export type DashConfig = Omit<z.infer<typeof ConfigSchema>, "widgets"> & {
   widgets: WidgetConfig[];
 };
 
+const DockerSchema = z
+  .object({
+    proxy_url: z
+      .string()
+      .describe("URL of your docker-socket-proxy")
+      .default("http://dockersocket:2375"),
+  })
+  .prefault({});
+
 export const ConfigSchema = z.object({
+  docker: DockerSchema,
   widgets: z
     .array(WidgetSchema)
     .default([])

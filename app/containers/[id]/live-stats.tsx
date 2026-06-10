@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { RelativeTime } from "@/components/relative-time";
 import { StatCard } from "@/components/stat-card";
+import type { LiveStatsData } from "@/lib/docker";
+import { useContainerLiveStats } from "@/lib/docker/hooks";
 import { formatBytes } from "@/lib/utils";
-
-const POLL_MS = 5000;
 
 export function LiveStats({
   id,
@@ -18,44 +17,7 @@ export function LiveStats({
   restartCount: number;
   restartPolicy: string;
 }) {
-  const [stats, setStats] = useState<LiveStatsData | null>(initial);
-  const [stale, setStale] = useState(false);
-  const [updatedAt, setUpdatedAt] = useState<number | null>(() =>
-    initial ? Date.now() : null,
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-    let inFlight = false;
-
-    async function tick() {
-      if (inFlight) return;
-      inFlight = true;
-      try {
-        const res = await fetch(`/api/containers/${id}/stats`, {
-          cache: "no-store",
-        });
-        if (!cancelled && res.ok) {
-          setStats(await res.json());
-          setUpdatedAt(Date.now());
-          setStale(false);
-        } else if (!cancelled) {
-          setStale(true);
-        }
-      } catch {
-        if (!cancelled) setStale(true);
-      } finally {
-        inFlight = false;
-      }
-    }
-
-    const interval = setInterval(tick, POLL_MS);
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, [id]);
-
+  const { data: stats, stale, updatedAt } = useContainerLiveStats(initial, id);
   const memPercent = stats?.memLimit
     ? (stats.memUsed / stats.memLimit) * 100
     : 0;

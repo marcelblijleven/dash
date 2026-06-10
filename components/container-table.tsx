@@ -9,8 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { containerName, isHealthy } from "@/lib/docker";
-import type { Container } from "@/lib/docker/docker";
+import { type Container, containerName, isHealthy } from "@/lib/docker";
 
 function statusVariant(container: Container) {
   if (container.State === "running") {

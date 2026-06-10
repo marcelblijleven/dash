@@ -39,6 +39,7 @@ export default async function ContainerPage({
   try {
     inspect = await inspectContainer(id);
   } catch {
+    console.log("not found", id);
     notFound();
   }
 
@@ -88,7 +89,7 @@ export default async function ContainerPage({
 
       <LiveStats
         id={inspect.Id}
-        initial={null} // TODO
+        initial={initial}
         restartCount={inspect.RestartCount}
         restartPolicy={inspect.HostConfig.RestartPolicy.Name}
       />
@@ -153,8 +154,11 @@ export default async function ContainerPage({
           </CardHeader>
           <CardContent className="font-mono text-xs">
             <div className="space-y-1">
-              {inspect.Mounts.map((m, i) => (
-                <div key={i} className="grid grid-cols-[60px_1fr] gap-3">
+              {inspect.Mounts.map((m) => (
+                <div
+                  key={`${m.Source}:${m.Destination}`}
+                  className="grid grid-cols-[60px_1fr] gap-3"
+                >
                   <span className="text-muted-foreground">{m.Type}</span>
                   <span className="break-all">
                     {m.Source} <span className="text-muted-foreground">→</span>{" "}

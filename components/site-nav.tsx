@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 
 type NavLink = { href: string; label: string };
 
-const links: NavLink[] = [{ href: "/containers", label: "Containers" }];
+const links: NavLink[] = [
+  { href: "/containers", label: "Containers" },
+  { href: "/routers", label: "Routers" },
+];
 
 export function DesktopNav() {
   return (

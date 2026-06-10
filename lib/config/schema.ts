@@ -32,12 +32,19 @@ const DockerSchema = z
   })
   .prefault({});
 
+const TraefikSchema = z
+  .object({
+    api_url: z
+      .string()
+      .describe("Traefik API URL (must be reachable from dash)")
+      .default("http://traefik:8080"),
+  })
+  .prefault({});
+
 export const ConfigSchema = z.object({
   docker: DockerSchema,
-  widgets: z
-    .array(WidgetSchema)
-    .default([])
-    .describe("Widgets to include in the dashboard"),
+  traefik: TraefikSchema,
+  widgets: z.array(WidgetSchema).default([]),
 });
 
 export function configJsonSchema() {

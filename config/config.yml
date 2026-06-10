@@ -1,3 +1,6 @@
+docker:
+  proxy_url: http://dockersocket:2375
+
 widgets:
   - type: host-stats
     size: medium

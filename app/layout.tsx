@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Script from "next/script";
 import { ConfigErrorBanner } from "@/components/config-error-banner";
 import { SiteHeader } from "@/components/site-header";
 
@@ -16,10 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <head>
-        <script src="/theme.js" />
-      </head>
-
+      <Script src="/theme.js" />
       <body className="min-h-dvh">
         <SiteHeader />
         <main className="mx-auto max-w-7xl px-6 py-8">

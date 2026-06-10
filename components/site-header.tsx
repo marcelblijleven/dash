@@ -1,9 +1,6 @@
 import Link from "next/link";
+import { DesktopNav, MobileMenu } from "./site-nav";
 import { ThemeToggle } from "./theme-toggle";
-
-type NavLink = { href: string; label: string };
-
-const links: NavLink[] = [{ href: "/containers", label: "Containers" }];
 
 export function SiteHeader() {
   return (
@@ -17,22 +14,11 @@ export function SiteHeader() {
             <span className="size-2 rounded-sm bg-primary" aria-hidden />
             dash
           </Link>
+          <DesktopNav />
         </div>
         <div className="flex items-center gap-2 text-sm">
-          <nav className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
-            foo
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="rounded-md px-2.5 py-1 transition-colors hover:bg-muted hover:text-foreground"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-
           <ThemeToggle />
+          <MobileMenu />
         </div>
       </div>
     </header>

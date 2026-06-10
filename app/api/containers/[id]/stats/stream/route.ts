@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import {
+  type ContainerStats,
   cpuPercentage,
   getContainerStats,
   getNetworkStats,
@@ -30,7 +31,7 @@ export async function GET(
 
       const unsubscribe = subribeToDockerStats(send);
 
-      getContainerStats(id).then((stats) => {
+      getContainerStats(id).then((stats: ContainerStats) => {
         if (stats) {
           const net = getNetworkStats(stats);
           const livestats: LiveStatsData = {

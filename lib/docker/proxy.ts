@@ -6,7 +6,7 @@ export function listContainers() {
 }
 
 export function inspectContainer(id: string) {
-  return dockerGet<ContainerInspect>(`/container/${id}/json`);
+  return dockerGet<ContainerInspect>(`/containers/${id}/json`);
 }
 
 export function getContainerStats(id: string) {

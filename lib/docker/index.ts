@@ -3,6 +3,7 @@ import { subscribeToContainerStats } from "./listener";
 import {
   containerName,
   cpuPercentage,
+  getContainerLogs,
   getContainerStats,
   getNetworkStats,
   inspectContainer,
@@ -25,6 +26,7 @@ export {
   type ContainerStats,
   containerName,
   cpuPercentage,
+  getContainerLogs,
   getContainerStats,
   getNetworkStats,
   inspectContainer,

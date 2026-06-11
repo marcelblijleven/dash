@@ -9,10 +9,12 @@ export function inspectContainer(id: string) {
   return dockerGet<ContainerInspect>(`/containers/${id}/json`);
 }
 
-export function getContainerStats(id: string) {
-  return dockerGet<ContainerStats>(
-    `/containers/${id}/stats?stream=false&one-shot=true`,
-  );
+export function getContainerStats(
+  id: string,
+  { oneShot = true }: { oneShot?: boolean } = {},
+) {
+  const query = oneShot ? "stream=false&one-shot=true" : "stream=false";
+  return dockerGet<ContainerStats>(`/containers/${id}/stats?${query}`);
 }
 
 export function isHealthy(container: Container): boolean {

@@ -1,12 +1,5 @@
 import type { NextRequest } from "next/server";
-import {
-  type ContainerStats,
-  cpuPercentage,
-  getContainerStats,
-  getNetworkStats,
-  type LiveStatsData,
-  subribeToDockerStats,
-} from "@/lib/docker";
+import { type LiveStatsData, subscribeToContainerStats } from "@/lib/docker";
 
 export const dynamic = "force-dynamic";
 
@@ -29,22 +22,7 @@ export async function GET(
         }
       };
 
-      const unsubscribe = subribeToDockerStats(send);
-
-      getContainerStats(id).then((stats: ContainerStats) => {
-        if (stats) {
-          const net = getNetworkStats(stats);
-          const livestats: LiveStatsData = {
-            cpu: cpuPercentage(stats),
-            memUsed: stats.memory_stats?.usage ?? 0,
-            memLimit: stats.memory_stats?.limit ?? 0,
-            cores: stats.cpu_stats?.online_cpus ?? 1,
-            netRx: net.rx,
-            netTx: net.tx,
-          };
-          send(livestats);
-        }
-      });
+      const unsubscribe = subscribeToContainerStats(id, send);
 
       req.signal.addEventListener("abort", () => {
         unsubscribe();

@@ -1,5 +1,5 @@
 import { useContainerLiveStats } from "./hooks";
-import { subribeToDockerStats } from "./listener";
+import { subscribeToContainerStats } from "./listener";
 import {
   containerName,
   cpuPercentage,
@@ -34,6 +34,6 @@ export {
   listContainers,
   type Port,
   proxyUrl,
-  subribeToDockerStats,
+  subscribeToContainerStats,
   useContainerLiveStats,
 };

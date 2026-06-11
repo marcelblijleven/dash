@@ -7,6 +7,7 @@ import { StatusDot } from "@/components/ui/status-dot";
 import {
   type ContainerInspect,
   cpuPercentage,
+  getContainerLogs,
   getContainerStats,
   getNetworkStats,
   inspectContainer,
@@ -39,20 +40,28 @@ export default async function ContainerPage({
   try {
     inspect = await inspectContainer(id);
   } catch {
-    console.log("not found", id);
     notFound();
   }
 
-  const stats = await getContainerStats(id);
+  const [statsResult, logsResult] = await Promise.allSettled([
+    getContainerStats(id),
+    getContainerLogs(id),
+  ]);
+
+  const stats = statsResult.status === "fulfilled" ? statsResult.value : null;
+  const logs = logsResult.status === "fulfilled" ? logsResult.value : null;
+
   const net = getNetworkStats(stats);
-  const initial: LiveStatsData = {
-    cpu: cpuPercentage(stats),
-    memUsed: stats.memory_stats?.usage ?? 0,
-    memLimit: stats.memory_stats?.limit ?? 0,
-    cores: stats.cpu_stats?.online_cpus ?? 1,
-    netRx: net.rx,
-    netTx: net.tx,
-  };
+  const initial: LiveStatsData | null = stats
+    ? {
+        cpu: cpuPercentage(stats),
+        memUsed: stats.memory_stats?.usage ?? 0,
+        memLimit: stats.memory_stats?.limit ?? 0,
+        cores: stats.cpu_stats?.online_cpus ?? 1,
+        netRx: net.rx,
+        netTx: net.tx,
+      }
+    : null;
 
   const name = inspect.Name.replace(/^\//, "");
   const labels = Object.entries(inspect.Config.Labels ?? {});
@@ -203,7 +212,23 @@ export default async function ContainerPage({
           <CardTitle>Logs</CardTitle>
           <span className="text-xs text-muted-foreground">last 200 lines</span>
         </CardHeader>
-        <CardContent>TODO</CardContent>
+        <CardContent>
+          {logs === null ? (
+            <p className="text-sm text-muted-foreground">
+              Logs are not permitted by the socket proxy. Set{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">
+                LOGS=1
+              </code>{" "}
+              on the proxy to enable.
+            </p>
+          ) : !logs.trim() ? (
+            <p className="text-sm text-muted-foreground">No log output.</p>
+          ) : (
+            <pre className="max-h-96 overflow-auto rounded-md border border-border bg-muted/30 p-3 font-mono text-xs leading-relaxed">
+              {logs}
+            </pre>
+          )}
+        </CardContent>
       </Card>
     </div>
   );

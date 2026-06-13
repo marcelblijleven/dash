@@ -4,15 +4,20 @@ import { WIDGET_TYPES } from "@/lib/widgets/types";
 
 export type WidgetSize = "small" | "medium" | "large";
 
-export const WidgetSchema = z.object({
-  type: z
-    .enum([WIDGET_TYPES[0], ...WIDGET_TYPES.slice(1)] as [string, ...string[]])
-    .describe(
-      "Widget type, determines which fields are valid for each widget.",
-    ),
-  title: z.string().optional(),
-  size: z.enum(["small", "medium", "large"]).default("medium"),
-});
+export const WidgetSchema = z
+  .object({
+    type: z
+      .enum([WIDGET_TYPES[0], ...WIDGET_TYPES.slice(1)] as [
+        string,
+        ...string[],
+      ])
+      .describe(
+        "Widget type, determines which fields are valid for each widget.",
+      ),
+    title: z.string().optional(),
+    size: z.enum(["small", "medium", "large"]).default("medium"),
+  })
+  .loose();
 
 export type WidgetConfig = z.infer<typeof WidgetSchema> & {
   id: string;
@@ -41,10 +46,33 @@ const TraefikSchema = z
   })
   .prefault({});
 
+const ShortCutSchema = z.object({
+  name: z.string(),
+  path: z.string(),
+  icon: z.string().optional(),
+});
+
+const AppSchema = z.object({
+  title: z.string().describe("Display name and search key"),
+  url: z.string().describe("Launch URL"),
+  "local-url": z
+    .string()
+    .optional()
+    .describe("Local network URL, used when on the same network"),
+  icon: z
+    .string()
+    .optional()
+    .describe("Icon name from selfh.st/icons or a full URL"),
+  category: z.string().optional().describe("Category for grouping"),
+  description: z.string().optional(),
+  shortcuts: z.array(ShortCutSchema).default([]),
+});
+
 export const ConfigSchema = z.object({
   docker: DockerSchema,
   traefik: TraefikSchema,
   widgets: z.array(WidgetSchema).default([]),
+  apps: z.array(AppSchema).default([]),
 });
 
 export function configJsonSchema() {

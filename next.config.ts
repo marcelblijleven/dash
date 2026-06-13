@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      new URL("https://cdn.jsdelivr.net/gh/selfhst/icons/png/*.png"),
+    ],
+  },
   async headers() {
     return [
       {

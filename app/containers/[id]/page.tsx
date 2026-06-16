@@ -1,9 +1,10 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, unauthorized } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusDot } from "@/components/ui/status-dot";
+import { requireUser } from "@/lib/auth/current-user";
 import {
   type ContainerInspect,
   cpuPercentage,
@@ -34,6 +35,10 @@ export default async function ContainerPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const user = await requireUser();
+  if (!user) {
+    unauthorized();
+  }
   const { id } = await params;
 
   let inspect: ContainerInspect;

@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
       new URL("https://cdn.jsdelivr.net/gh/selfhst/icons/png/*.png"),
     ],
   },
+  experimental: {
+    authInterrupts: true,
+  },
   async headers() {
     return [
       {

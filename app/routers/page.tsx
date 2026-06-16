@@ -1,3 +1,4 @@
+import { unauthorized } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusDot } from "@/components/ui/status-dot";
@@ -9,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { requireUser } from "@/lib/auth/current-user";
 import {
   buildServiceMap,
   extractHosts,
@@ -22,6 +24,10 @@ export const dynamic = "force-dynamic";
 type Variant = "success" | "warning" | "danger" | "neutral";
 
 export default async function RoutersPage() {
+  const user = await requireUser();
+  if (!user) {
+    unauthorized();
+  }
   const [routersR, servicesR] = await Promise.allSettled([
     listRouters(),
     listServices(),

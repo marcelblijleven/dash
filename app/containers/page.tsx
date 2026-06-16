@@ -1,6 +1,8 @@
+import { unauthorized } from "next/navigation";
 import { ContainerTable } from "@/components/container-table";
 import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireUser } from "@/lib/auth/current-user";
 import type { WidgetConfig } from "@/lib/config/schema";
 import { isHealthy, listContainers } from "@/lib/docker";
 import {
@@ -10,6 +12,10 @@ import {
 } from "@/lib/widgets/host-stat";
 
 export default async function ContainerOverviewPage() {
+  const user = await requireUser();
+  if (!user) {
+    unauthorized();
+  }
   const containers = await listContainers().catch(() => []);
 
   const running = containers.filter((c) => c.State === "running");

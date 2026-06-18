@@ -1,4 +1,5 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { requireUserOr401 } from "@/lib/auth/current-user";
 import {
   getLatestHostSnapshot,
   type HostSnapshot,
@@ -8,6 +9,9 @@ import {
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  const auth = await requireUserOr401();
+  if (auth instanceof NextResponse) return auth;
+
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream<Uint8Array>({

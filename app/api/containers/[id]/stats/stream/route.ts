@@ -1,4 +1,5 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { requireUserOr401 } from "@/lib/auth/current-user";
 import { type LiveStatsData, subscribeToContainerStats } from "@/lib/docker";
 
 export const dynamic = "force-dynamic";
@@ -7,6 +8,9 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const auth = await requireUserOr401();
+  if (auth instanceof NextResponse) return auth;
+
   const encoder = new TextEncoder();
   const id = (await params).id;
 

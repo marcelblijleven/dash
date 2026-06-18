@@ -1,5 +1,7 @@
+import { unauthorized } from "next/navigation";
 import { SearchableApps } from "@/components/searchable-apps";
 import { WidgetGrid } from "@/components/widget-grid";
+import { requireUser } from "@/lib/auth/current-user";
 import { type LoadResult, loadConfig } from "@/lib/config/loader";
 import { configAppsToEntries, parseDashEntries } from "@/lib/dash";
 import { type Container, listContainers } from "@/lib/docker";
@@ -16,6 +18,10 @@ function getResultValue<T>(result: PromiseSettledResult<T>, fallback: T): T {
 }
 
 export default async function HomePage() {
+  const user = await requireUser();
+  if (!user) {
+    unauthorized();
+  }
   const [containersResult, routersResult, configResult] =
     await Promise.allSettled([listContainers(), listRouters(), loadConfig()]);
 

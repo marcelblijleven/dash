@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
+import { requireUserOr401 } from "@/lib/auth/current-user";
 import { getHostStats } from "@/lib/host";
 import { getHostSamples } from "@/lib/metrics";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const auth = await requireUserOr401();
+  if (auth instanceof NextResponse) return auth;
+
   const host = await getHostStats();
 
   return NextResponse.json({

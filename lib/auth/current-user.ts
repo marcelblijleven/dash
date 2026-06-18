@@ -1,10 +1,9 @@
 import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
-const AUTH_MODE = (process.env.DASH_AUTH_MODE ?? "none") as
-  | "none"
-  | "forward_auth";
-const AUTH_ENABLED = AUTH_MODE !== "none";
 export const DASH_ADMIN_GROUP = "dash-admins";
+
+type AuthMode = "none" | "forward_auth";
 
 export type CurrentUser = {
   username: string;
@@ -20,8 +19,16 @@ const LOCAL_USER: CurrentUser = {
   groups: [],
 };
 
+function authMode(): AuthMode {
+  return (process.env.DASH_AUTH_MODE ?? "none") as AuthMode;
+}
+
+export function isAuthEnabled(): boolean {
+  return authMode() !== "none";
+}
+
 export async function getCurrentUser(): Promise<CurrentUser | null> {
-  if (!AUTH_ENABLED) return LOCAL_USER;
+  if (!isAuthEnabled()) return LOCAL_USER;
 
   if (process.env.NODE_ENV !== "production" && process.env.DASH_DEV_USER) {
     return {
@@ -53,12 +60,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 }
 
 export async function requireUser(): Promise<CurrentUser | null> {
-  const user = await getCurrentUser();
-  if (!user) {
-    return null;
-  }
-
-  return user;
+  return getCurrentUser();
 }
 
 export async function requireGroup(group: string): Promise<CurrentUser | null> {
@@ -77,13 +79,16 @@ export function requireAdmin(): Promise<CurrentUser | null> {
 
 export function isAdmin(user: CurrentUser | null): boolean {
   if (user === null) {
-    if (!AUTH_ENABLED) return true;
-
+    if (!isAuthEnabled()) return true;
     return false;
   }
   return user.groups.includes(DASH_ADMIN_GROUP);
 }
 
-export function isAuthEnabled(): boolean {
-  return AUTH_ENABLED;
+export async function requireUserOr401(): Promise<CurrentUser | NextResponse> {
+  const user = await getCurrentUser();
+  if (!user) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  return user;
 }

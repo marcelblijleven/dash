@@ -31,7 +31,7 @@ export function proxy(request: NextRequest) {
     for (const header of SENSITIVE_HEADERS) headers.delete(header);
   }
 
-  return NextResponse.next({ headers: headers });
+  return NextResponse.next({ request: { headers } });
 }
 
 export const config = {

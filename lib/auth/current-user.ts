@@ -71,5 +71,19 @@ export async function requireGroup(group: string): Promise<CurrentUser | null> {
 }
 
 export function requireAdmin(): Promise<CurrentUser | null> {
+  if (!isAuthEnabled()) return Promise.resolve(LOCAL_USER);
   return requireGroup(DASH_ADMIN_GROUP);
+}
+
+export function isAdmin(user: CurrentUser | null): boolean {
+  if (user === null) {
+    if (!AUTH_ENABLED) return true;
+
+    return false;
+  }
+  return user.groups.includes(DASH_ADMIN_GROUP);
+}
+
+export function isAuthEnabled(): boolean {
+  return AUTH_ENABLED;
 }

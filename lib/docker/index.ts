@@ -1,3 +1,4 @@
+import { type ContainerAction, dockerAction } from "./actions";
 import { useContainerLiveStats } from "./hooks";
 import { subscribeToContainerStats } from "./listener";
 import {
@@ -22,10 +23,12 @@ import { proxyUrl } from "./utils";
 
 export {
   type Container,
+  type ContainerAction,
   type ContainerInspect,
   type ContainerStats,
   containerName,
   cpuPercentage,
+  dockerAction,
   getContainerLogs,
   getContainerStats,
   getNetworkStats,

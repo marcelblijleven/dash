@@ -14,6 +14,8 @@ import {
   inspectContainer,
   type LiveStatsData,
 } from "@/lib/docker";
+import { shortId } from "@/lib/utils";
+import { ContainerActions } from "./container-actions";
 import { LiveStats } from "./live-stats";
 
 export const dynamic = "force-dynamic";
@@ -96,9 +98,10 @@ export default async function ContainerPage({
             </Badge>
           </div>
           <div className="mt-1 break-all font-mono text-xs text-muted-foreground">
-            {inspect.Config.Image} · {inspect.Id}
+            {inspect.Config.Image} · {shortId(inspect.Id)}
           </div>
         </div>
+        <ContainerActions id={inspect.Id} running={inspect.State.Running} />
       </div>
 
       <LiveStats

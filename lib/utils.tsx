@@ -21,3 +21,7 @@ export function formatUptime(seconds: number): string {
   if (h > 0) return `${h}h ${m}m`;
   return `${m}m`;
 }
+
+export function shortId(id: string): string {
+  return id.slice(0, 12);
+}

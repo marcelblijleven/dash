@@ -31,6 +31,11 @@ const DASH_ENV_KEYS = [
   "DASH_DEV_GROUPS",
 ] as const;
 
+function setNodeEnv(value: string | undefined) {
+  // NODE_ENV is typed as readonly; cast to a writable record for the test.
+  (process.env as Record<string, string | undefined>).NODE_ENV = value;
+}
+
 describe("auth/current-user", () => {
   const ORIG_NODE_ENV = process.env.NODE_ENV;
   const ORIG_DASH: Record<string, string | undefined> = {};
@@ -51,7 +56,7 @@ describe("auth/current-user", () => {
         process.env[k] = ORIG_DASH[k];
       }
     }
-    process.env.NODE_ENV = ORIG_NODE_ENV;
+    setNodeEnv(ORIG_NODE_ENV);
   });
 
   describe("when auth is disabled (default)", () => {
@@ -133,7 +138,7 @@ describe("auth/current-user", () => {
     });
 
     it("uses DASH_DEV_USER outside production and skips the header lookup", async () => {
-      process.env.NODE_ENV = "development";
+      setNodeEnv("development");
       process.env.DASH_DEV_USER = "dev";
       process.env.DASH_DEV_EMAIL = "dev@example.com";
       process.env.DASH_DEV_NAME = "Dev User";
@@ -151,7 +156,7 @@ describe("auth/current-user", () => {
     });
 
     it("ignores DASH_DEV_USER in production", async () => {
-      process.env.NODE_ENV = "production";
+      setNodeEnv("production");
       process.env.DASH_DEV_USER = "shouldNotBeUsed";
       vi.mocked(headers).mockResolvedValue(fakeHeaders({}));
 

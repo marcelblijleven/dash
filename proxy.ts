@@ -9,8 +9,7 @@ const SENSITIVE_HEADERS = [
 ];
 
 type AuthMode = "none" | "forward_auth";
-const AUTH_MODE: AuthMode = (process.env.DASH_AUTH_MODE ||
-  "none") as AuthMode;
+const AUTH_MODE: AuthMode = (process.env.DASH_AUTH_MODE || "none") as AuthMode;
 const PROXY_SECRET = process.env.DASH_PROXY_SECRET;
 const PROXY_SECRET_HEADER = "x-dash-proxy-secret";
 

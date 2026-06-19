@@ -5,9 +5,18 @@
 #
 # Built-in widget types:
 #   host-stats          combined uptime, load, memory and CPU stats
+#   teslamate           battery, range, charging state from TeslaMate MQTT
 #
 # Sizes: small (1 col), medium (2 cols), large (3 cols or full row).
 widgets:
   - type: host-stats
     size: medium
+
+  # - type: teslamate
+  #   size: medium
+  #   car_id: 1                          # TeslaMate car id (default: "1")
+  #   mqtt_url: mqtt://mosquitto:1883    # required
+  #   mqtt_username: ${MQTT_USERNAME}    # optional
+  #   mqtt_password: ${MQTT_PASSWORD}    # optional
+  #   topic_prefix: teslamate            # default: "teslamate"
 

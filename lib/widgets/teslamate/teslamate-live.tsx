@@ -92,7 +92,7 @@ function Body({ data }: { data: TeslaState }) {
       <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-sm">
         <dt className="text-muted-foreground">State</dt>
         <dd className="text-right">
-          <StateLabel state={data.state} since={data.since} />
+          <StateLabel state={data.state} />
         </dd>
         {isPlugged && (
           <>
@@ -133,13 +133,7 @@ function Body({ data }: { data: TeslaState }) {
   );
 }
 
-function StateLabel({
-  state,
-  since,
-}: {
-  state: string | null;
-  since: string | null;
-}) {
+function StateLabel({ state }: { state: string | null }) {
   if (!state) return <span className="text-muted-foreground">-</span>;
   const color =
     state === "driving"
@@ -149,24 +143,7 @@ function StateLabel({
         : state === "asleep" || state === "offline"
           ? "text-muted-foreground"
           : "";
-  const duration = formatSince(since);
-  return (
-    <span>
-      <span className={color}>{state}</span>
-      {duration && <span className="text-muted-foreground"> · {duration}</span>}
-    </span>
-  );
-}
-
-function formatSince(since: string | null): string | null {
-  if (!since) return null;
-  const ts = Date.parse(since);
-  if (Number.isNaN(ts)) return null;
-  const seconds = Math.max(0, Math.floor((Date.now() - ts) / 1000));
-  if (seconds < 60) return `${seconds}s`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
-  return `${Math.floor(seconds / 86400)}d`;
+  return <span className={color}>{state}</span>;
 }
 
 function formatCharging(data: TeslaState): string {

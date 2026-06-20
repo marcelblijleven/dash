@@ -6,19 +6,22 @@ export function StatCard({
   title,
   value,
   hint,
+  headerHint,
   spark,
   className,
 }: {
   title: string;
   value: ReactNode;
   hint?: ReactNode;
+  headerHint?: ReactNode;
   spark?: ReactNode;
   className?: string;
 }) {
   return (
     <Card className={cn("", className)}>
-      <CardHeader>
+      <CardHeader className="flex-row items-center justify-between gap-2 pb-2">
         <CardTitle>{title}</CardTitle>
+        {headerHint}
       </CardHeader>
       <CardContent>
         <CardValue>{value}</CardValue>

@@ -78,6 +78,7 @@ describe("getStatusSnapshot", () => {
       config: {
         docker: { proxy_url: "http://x" },
         traefik: { api_url: "http://y" },
+        teslamate: {},
         apps: [
           {
             title: "Manual",

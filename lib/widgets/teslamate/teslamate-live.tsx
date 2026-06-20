@@ -17,15 +17,17 @@ export function TeslamateLive({
 }) {
   const { data, stale, updatedAt } = useTeslaState(carId, initial);
 
-  const hint = (
+  // When the car is asleep/offline the displayed values are frozen from the
+  // last online moment, so "updated Xs ago" misrepresents the data freshness.
+  // The state row already shows how long the car has been in that state.
+  const isReporting = data ? isActivelyReporting(data.state) : true;
+  const hint = stale ? (
+    <span className="text-xs text-amber-600 dark:text-amber-400">stale</span>
+  ) : isReporting ? (
     <span className="text-xs text-muted-foreground">
-      {stale ? (
-        <span className="text-amber-600 dark:text-amber-400">stale</span>
-      ) : (
-        <RelativeTime since={updatedAt} />
-      )}
+      <RelativeTime since={updatedAt} />
     </span>
-  );
+  ) : null;
 
   const displayTitle =
     title || data?.displayName || `Tesla ${data?.carId ?? carId}`;
@@ -34,6 +36,19 @@ export function TeslamateLive({
     <WidgetCard title={displayTitle} hint={hint}>
       {data ? <Body data={data} /> : <Empty />}
     </WidgetCard>
+  );
+}
+
+function isActivelyReporting(state: string | null): boolean {
+  // Active = car is awake and pushing fresh data.
+  // Inactive (asleep/offline/suspended) = stored values from the last online
+  // session, no fresh telemetry coming in.
+  if (state === null) return true;
+  return (
+    state === "online" ||
+    state === "driving" ||
+    state === "charging" ||
+    state === "updating"
   );
 }
 
@@ -54,26 +69,26 @@ function Body({ data }: { data: TeslaState }) {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-4">
-        <BatteryBar
-          percent={battery}
-          limit={data.chargeLimitSoc}
-          charging={isCharging}
-        />
-        <div className="ml-auto flex items-baseline gap-2">
-          <span className="text-2xl font-semibold tabular-nums">
-            {battery !== null ? `${Math.round(battery)}%` : "-"}
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-semibold tabular-nums">
+          {battery !== null ? `${Math.round(battery)}%` : "-"}
+        </span>
+        {range !== null && (
+          <span className="text-sm text-muted-foreground tabular-nums">
+            {Math.round(range)} km
           </span>
-          {range !== null && (
-            <span className="text-sm text-muted-foreground tabular-nums">
-              {Math.round(range)} km
-            </span>
-          )}
-          {data.updateAvailable === true && (
-            <Badge variant="warning">update</Badge>
-          )}
-        </div>
+        )}
+        {data.updateAvailable === true && (
+          <Badge variant="warning" className="ml-auto">
+            update
+          </Badge>
+        )}
       </div>
+      <BatteryBar
+        percent={battery}
+        limit={data.chargeLimitSoc}
+        charging={isCharging}
+      />
       <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-sm">
         <dt className="text-muted-foreground">State</dt>
         <dd className="text-right">
@@ -189,6 +204,10 @@ function formatOdometer(km: number): string {
 
 const CELL_COUNT = 10;
 const LOW_ZONE_CELLS = 2;
+const BATTERY_CELL_KEYS = Array.from(
+  { length: CELL_COUNT },
+  (_, i) => `cell-${i}`,
+);
 
 function BatteryBar({
   percent,
@@ -211,12 +230,13 @@ function BatteryBar({
 
   return (
     <div
+      role="img"
       className="flex gap-1"
       aria-label={`battery ${Math.round(pct)}%${
         limitPct !== null ? `, limit ${limitPct}%` : ""
       }`}
     >
-      {Array.from({ length: CELL_COUNT }, (_, i) => {
+      {BATTERY_CELL_KEYS.map((key, i) => {
         const idx = i + 1;
         const filled = idx <= filledCells;
         const inLowZone = idx <= LOW_ZONE_CELLS;
@@ -228,13 +248,13 @@ function BatteryBar({
             ? "bg-red-500"
             : "bg-emerald-500"
           : isLimit
-            ? "bg-amber-500/40 dark:bg-amber-500/35"
+            ? "bg-sky-400/50 dark:bg-sky-400/40"
             : "bg-muted-foreground/15";
 
         return (
           <div
-            key={i}
-            className={`h-8 w-4 rounded-[3px] transition-colors duration-300 ${color} ${
+            key={key}
+            className={`h-2 flex-1 rounded-[2px] transition-colors duration-300 ${color} ${
               isNext ? "animate-pulse bg-emerald-500/30" : ""
             }`}
           />

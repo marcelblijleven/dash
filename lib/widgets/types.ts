@@ -5,6 +5,10 @@ export const WIDGET_TYPES = [
   "host-stat-memory",
   "host-stat-uptime",
   "teslamate",
+  "teslamate-stats",
+  "teslamate-recent",
+  "teslamate-efficiency",
+  "teslamate-cost",
 ] as const;
 
 export type WidgetType = (typeof WIDGET_TYPES)[number];

@@ -1,1 +1,5 @@
-export { getStatusSnapshot, type StatusEntry, type StatusSnapshot } from "./snapshot";
+export {
+  getStatusSnapshot,
+  type StatusEntry,
+  type StatusSnapshot,
+} from "./snapshot";

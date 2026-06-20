@@ -46,6 +46,31 @@ const TraefikSchema = z
   })
   .prefault({});
 
+// Passwords commonly contain characters that YAML parses as non-strings
+// (e.g. unquoted "12345" becomes a number, "yes" becomes a boolean). Coerce
+// to string so an unquoted password still works, then enforce non-empty.
+const PasswordField = z.preprocess(
+  (v) => (v == null ? v : String(v)),
+  z.string().min(1, "password is required and must be non-empty"),
+);
+
+const TeslamatePostgresSchema = z
+  .object({
+    host: z.string().describe("TeslaMate Postgres host"),
+    port: z.number().int().positive().default(5432),
+    database: z.string().default("teslamate"),
+    user: z.string().default("teslamate"),
+    password: PasswordField,
+    ssl: z.boolean().default(false),
+  })
+  .optional();
+
+const TeslamateSchema = z
+  .object({
+    postgres: TeslamatePostgresSchema,
+  })
+  .prefault({});
+
 const ShortCutSchema = z.object({
   name: z.string(),
   path: z.string(),
@@ -71,6 +96,7 @@ const AppSchema = z.object({
 export const ConfigSchema = z.object({
   docker: DockerSchema,
   traefik: TraefikSchema,
+  teslamate: TeslamateSchema,
   widgets: z.array(WidgetSchema).default([]),
   apps: z.array(AppSchema).default([]),
 });

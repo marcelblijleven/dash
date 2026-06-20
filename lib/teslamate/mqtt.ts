@@ -1,4 +1,5 @@
 import type { MqttClient } from "mqtt";
+import { loadConfig } from "@/lib/config/loader";
 
 export type TeslaState = {
   carId: string;
@@ -23,13 +24,6 @@ export type TeslaState = {
   updatedAt: number;
 };
 
-export type TeslamateConnection = {
-  mqttUrl: string;
-  username?: string;
-  password?: string;
-  topicPrefix: string;
-};
-
 type Listener = (state: TeslaState) => void;
 
 type Broker = {
@@ -41,14 +35,16 @@ type Broker = {
 };
 
 declare global {
-  var __dashTeslaBrokers: Map<string, Broker> | undefined;
+  var __dashTeslaBroker: Broker | undefined;
 }
 
-globalThis.__dashTeslaBrokers ??= new Map();
-const brokers = globalThis.__dashTeslaBrokers;
-
-function brokerKey(conn: TeslamateConnection): string {
-  return `${conn.mqttUrl}|${conn.username ?? ""}|${conn.topicPrefix}`;
+export class TeslamateMqttNotConfigured extends Error {
+  constructor() {
+    super(
+      "teslamate.mqtt is not configured in config.yml. Required for the teslamate live widget",
+    );
+    this.name = "TeslamateMqttNotConfigured";
+  }
 }
 
 function emptyState(carId: string): TeslaState {
@@ -161,18 +157,21 @@ function broadcast(broker: Broker, carId: string, state: TeslaState): void {
   }
 }
 
-async function ensureBroker(conn: TeslamateConnection): Promise<Broker> {
-  const key = brokerKey(conn);
-  let broker = brokers.get(key);
+async function ensureBroker(): Promise<Broker> {
+  const { config } = await loadConfig();
+  const cfg = config.teslamate?.mqtt;
+  if (!cfg) throw new TeslamateMqttNotConfigured();
+
+  let broker = globalThis.__dashTeslaBroker;
   if (!broker) {
     broker = {
       client: null,
       connecting: null,
       cars: new Map(),
       listeners: new Map(),
-      topicPrefix: conn.topicPrefix,
+      topicPrefix: cfg.topic_prefix,
     };
-    brokers.set(key, broker);
+    globalThis.__dashTeslaBroker = broker;
   }
   if (broker.client) return broker;
   if (broker.connecting) {
@@ -183,16 +182,16 @@ async function ensureBroker(conn: TeslamateConnection): Promise<Broker> {
   broker.connecting = (async () => {
     const { default: mqtt } = await import("mqtt");
     console.log(
-      `[dash:teslamate] connecting to ${conn.mqttUrl} (prefix=${conn.topicPrefix})`,
+      `[dash:teslamate] connecting to ${cfg.url} (prefix=${cfg.topic_prefix})`,
     );
-    const client = mqtt.connect(conn.mqttUrl, {
-      username: conn.username,
-      password: conn.password,
+    const client = mqtt.connect(cfg.url, {
+      username: cfg.username,
+      password: cfg.password,
       reconnectPeriod: 5000,
       clientId: `dash-${Math.random().toString(16).slice(2, 10)}`,
     });
 
-    const prefix = conn.topicPrefix;
+    const prefix = cfg.topic_prefix;
     const carTopic = new RegExp(`^${prefix}/cars/([^/]+)/(.+)$`);
     const b = broker as Broker;
     let messageCount = 0;
@@ -264,19 +263,17 @@ async function ensureBroker(conn: TeslamateConnection): Promise<Broker> {
 }
 
 export async function getTeslaState(
-  conn: TeslamateConnection,
   carId: string,
 ): Promise<TeslaState | null> {
-  const broker = await ensureBroker(conn);
+  const broker = await ensureBroker();
   return broker.cars.get(carId) ?? null;
 }
 
 export async function subscribeTeslaState(
-  conn: TeslamateConnection,
   carId: string,
   listener: Listener,
 ): Promise<() => void> {
-  const broker = await ensureBroker(conn);
+  const broker = await ensureBroker();
   let set = broker.listeners.get(carId);
   if (!set) {
     set = new Set();

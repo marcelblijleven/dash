@@ -1,6 +1,7 @@
 "use client";
 
 import { RelativeTime } from "@/components/relative-time";
+import { WidgetCard } from "@/components/widget-card";
 import { formatBytes, formatUptime } from "@/lib/utils";
 import { useHostStats } from "./use-host-stats";
 
@@ -19,11 +20,27 @@ export type HostStatsData = {
   }[];
 };
 
-export function HostStatsLive({ initial }: { initial: HostStatsData }) {
+export function HostStatsLive({
+  title,
+  initial,
+}: {
+  title: string;
+  initial: HostStatsData;
+}) {
   const { data: stats, stale, updatedAt } = useHostStats(initial);
 
+  const hint = (
+    <span className="text-xs text-muted-foreground">
+      {stale ? (
+        <span className="text-amber-600 dark:text-amber-400">stale</span>
+      ) : (
+        <RelativeTime since={updatedAt} />
+      )}
+    </span>
+  );
+
   return (
-    <div className="space-y-2">
+    <WidgetCard title={title} hint={hint}>
       <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-sm">
         <dt className="text-muted-foreground">Uptime</dt>
         <dd className="text-right tabular-nums">
@@ -46,15 +63,6 @@ export function HostStatsLive({ initial }: { initial: HostStatsData }) {
           </>
         )}
       </dl>
-      <div className="flex items-center justify-end text-xs text-muted-foreground">
-        {stale ? (
-          <span className="text-amber-600 dark:text-amber-400">
-            stats temporarily unavailable
-          </span>
-        ) : (
-          <RelativeTime since={updatedAt} />
-        )}
-      </div>
-    </div>
+    </WidgetCard>
   );
 }

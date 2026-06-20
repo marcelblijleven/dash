@@ -21,10 +21,14 @@ export function HostStatCard({
   const { data, stale, updatedAt } = useHostStats(initial);
 
   const view = render(field, data);
-  const hint = stale ? (
-    <span className="text-amber-600 dark:text-amber-400">stale</span>
-  ) : (
-    (view.hint ?? <RelativeTime since={updatedAt} />)
+  const headerHint = (
+    <span className="text-xs text-muted-foreground">
+      {stale ? (
+        <span className="text-amber-600 dark:text-amber-400">stale</span>
+      ) : (
+        <RelativeTime since={updatedAt} />
+      )}
+    </span>
   );
 
   const spark =
@@ -33,7 +37,13 @@ export function HostStatCard({
     ) : undefined;
 
   return (
-    <StatCard title={title} value={view.value} hint={hint} spark={spark} />
+    <StatCard
+      title={title}
+      value={view.value}
+      hint={view.hint}
+      headerHint={headerHint}
+      spark={spark}
+    />
   );
 }
 

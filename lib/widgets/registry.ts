@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import type { WidgetConfig } from "@/lib/config/schema";
+import { ArrWidget } from "@/lib/widgets/arr";
 import { HostChartWidget } from "@/lib/widgets/host-chart/host-chart";
 import {
   HostLoadWidget,
@@ -27,4 +28,5 @@ export const widgetRegistry: Record<WidgetType, WidgetComponent> = {
   "teslamate-recent": TeslamateRecentWidget,
   "teslamate-efficiency": TeslamateEfficiencyWidget,
   "teslamate-cost": TeslamateCostWidget,
+  arr: ArrWidget,
 };

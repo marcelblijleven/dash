@@ -10,6 +10,7 @@
 #   teslamate-recent       last N drives or charges (needs teslamate.postgres)
 #   teslamate-efficiency   Wh/km sparkline over 30 days (needs teslamate.postgres)
 #   teslamate-cost         monthly cost split home/public (needs teslamate.postgres)
+#   arr                    queue + upcoming calendar for sonarr/radarr/lidarr/readarr
 #
 # Sizes: small (1 col), medium (2 cols), large (3 cols or full row).
 
@@ -55,3 +56,10 @@ widgets:
   # - type: teslamate-cost
   #   size: medium
   #   car_id: 1
+
+  # - type: arr
+  #   size: medium
+  #   service: sonarr                  # sonarr | radarr | lidarr | readarr
+  #   url: http://sonarr:8989          # required
+  #   api_key: ${SONARR_API_KEY}       # required
+  #   title: TV                        # optional, defaults to capitalised service name

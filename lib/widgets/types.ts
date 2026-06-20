@@ -9,6 +9,7 @@ export const WIDGET_TYPES = [
   "teslamate-recent",
   "teslamate-efficiency",
   "teslamate-cost",
+  "arr",
 ] as const;
 
 export type WidgetType = (typeof WIDGET_TYPES)[number];

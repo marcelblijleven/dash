@@ -64,7 +64,8 @@ function DriveRow({ drive }: { drive: RecentDrive }) {
         <div className="truncate">{drive.endLabel ?? "Drive"}</div>
         <div className="text-xs text-muted-foreground">
           {formatDateTime(drive.startedAt)}
-          {drive.durationMin !== null && ` · ${formatDuration(drive.durationMin)}`}
+          {drive.durationMin !== null &&
+            ` · ${formatDuration(drive.durationMin)}`}
         </div>
       </div>
       <div className="text-right tabular-nums">

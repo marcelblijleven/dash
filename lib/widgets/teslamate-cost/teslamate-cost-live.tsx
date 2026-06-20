@@ -95,8 +95,14 @@ function MonthRow({
           style={{ width: `${widthPct}%` }}
           title={`${totalKwh.toFixed(0)} kWh, ${month.sessions} sessions`}
         >
-          <div className="h-full bg-emerald-500" style={{ width: `${homePct}%` }} />
-          <div className="h-full bg-blue-500" style={{ width: `${100 - homePct}%` }} />
+          <div
+            className="h-full bg-emerald-500"
+            style={{ width: `${homePct}%` }}
+          />
+          <div
+            className="h-full bg-blue-500"
+            style={{ width: `${100 - homePct}%` }}
+          />
         </div>
       </div>
       <div className="text-right tabular-nums">{fmtCost(total)}</div>

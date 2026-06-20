@@ -52,10 +52,7 @@ export async function GET(
         }
       };
 
-      const initial = await getTeslaState(
-        resolved.connection,
-        resolved.carId,
-      );
+      const initial = await getTeslaState(resolved.connection, resolved.carId);
       if (initial) send(initial);
 
       const unsubscribe = await subscribeTeslaState(

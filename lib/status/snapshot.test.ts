@@ -70,8 +70,27 @@ describe("getStatusSnapshot", () => {
 
   it("maps containers and config apps to StatusEntries, sorted by name", async () => {
     vi.mocked(listContainers).mockResolvedValue([
-      container({ Id: "c1", Names: ["/zeta"], Labels: { "dash.enable": "true", "dash.url": "https://zeta", "dash.category": "media", "dash.title": "Zeta" } }),
-      container({ Id: "c2", Names: ["/alpha"], State: "exited", Labels: { "dash.enable": "true", "dash.url": "https://alpha", "dash.category": "media", "dash.title": "Alpha" } }),
+      container({
+        Id: "c1",
+        Names: ["/zeta"],
+        Labels: {
+          "dash.enable": "true",
+          "dash.url": "https://zeta",
+          "dash.category": "media",
+          "dash.title": "Zeta",
+        },
+      }),
+      container({
+        Id: "c2",
+        Names: ["/alpha"],
+        State: "exited",
+        Labels: {
+          "dash.enable": "true",
+          "dash.url": "https://alpha",
+          "dash.category": "media",
+          "dash.title": "Alpha",
+        },
+      }),
     ]);
     vi.mocked(listRouters).mockResolvedValue([]);
     vi.mocked(loadConfig).mockResolvedValue({
@@ -116,9 +135,9 @@ describe("getStatusSnapshot", () => {
   it("treats a fulfilled but null config result as no apps", async () => {
     vi.mocked(listContainers).mockResolvedValue([]);
     vi.mocked(listRouters).mockResolvedValue([]);
-    vi.mocked(loadConfig).mockResolvedValue(null as unknown as Awaited<
-      ReturnType<typeof loadConfig>
-    >);
+    vi.mocked(loadConfig).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof loadConfig>>,
+    );
 
     const snap = await getStatusSnapshot();
     expect(snap.entries).toEqual([]);

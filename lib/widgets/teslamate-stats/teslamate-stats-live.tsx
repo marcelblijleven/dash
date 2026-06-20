@@ -41,8 +41,7 @@ export function TeslamateStatsLive({
 }
 
 function Body({ stats }: { stats: TeslaStats }) {
-  const fmtKm = (v: number) =>
-    `${Math.round(v).toLocaleString("en-US")} km`;
+  const fmtKm = (v: number) => `${Math.round(v).toLocaleString("en-US")} km`;
   const fmtKwh = (v: number) =>
     `${v.toLocaleString("en-US", { maximumFractionDigits: 1 })} kWh`;
   const fmtCost = (v: number) =>
@@ -53,7 +52,11 @@ function Body({ stats }: { stats: TeslaStats }) {
 
   return (
     <div className="grid grid-cols-3 gap-3 text-sm">
-      <Cell label="Driven" lifetime={fmtKm(stats.lifetime.km)} recent={fmtKm(stats.last30d.km)} />
+      <Cell
+        label="Driven"
+        lifetime={fmtKm(stats.lifetime.km)}
+        recent={fmtKm(stats.last30d.km)}
+      />
       <Cell
         label="Charged"
         lifetime={fmtKwh(stats.lifetime.kwh)}

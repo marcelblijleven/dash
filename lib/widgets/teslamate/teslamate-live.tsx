@@ -151,9 +151,7 @@ function StateLabel({
   return (
     <span>
       <span className={color}>{state}</span>
-      {duration && (
-        <span className="text-muted-foreground"> · {duration}</span>
-      )}
+      {duration && <span className="text-muted-foreground"> · {duration}</span>}
     </span>
   );
 }
@@ -191,9 +189,7 @@ function formatClimate(data: TeslaState): string | null {
   const inside =
     data.insideTemp !== null ? `${data.insideTemp.toFixed(1)}° in` : null;
   const outside =
-    data.outsideTemp !== null
-      ? `${data.outsideTemp.toFixed(1)}° out`
-      : null;
+    data.outsideTemp !== null ? `${data.outsideTemp.toFixed(1)}° out` : null;
   if (inside && outside) return `${inside} · ${outside}`;
   return inside ?? outside;
 }
@@ -219,14 +215,11 @@ function BatteryBar({
   charging: boolean;
 }) {
   const pct = Math.max(0, Math.min(100, percent ?? 0));
-  const limitPct =
-    limit !== null ? Math.max(0, Math.min(100, limit)) : null;
+  const limitPct = limit !== null ? Math.max(0, Math.min(100, limit)) : null;
   const filledCells = Math.round(pct / (100 / CELL_COUNT));
   const limitCell =
     limitPct !== null ? Math.round(limitPct / (100 / CELL_COUNT)) : null;
-  const nextFillCell = charging
-    ? Math.min(filledCells + 1, CELL_COUNT)
-    : null;
+  const nextFillCell = charging ? Math.min(filledCells + 1, CELL_COUNT) : null;
 
   return (
     <div

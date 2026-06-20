@@ -12,11 +12,7 @@ type Config = TeslamatePgWidgetConfig & {
   limit?: number;
 };
 
-export async function TeslamateRecentWidget({
-  config,
-}: {
-  config: Config;
-}) {
+export async function TeslamateRecentWidget({ config }: { config: Config }) {
   const carId = resolveCarId(config);
   const mode: RecentMode = config.mode === "charges" ? "charges" : "drives";
   const limit = clampLimit(config.limit);
@@ -28,7 +24,8 @@ export async function TeslamateRecentWidget({
         carId={carId}
         mode={mode}
         title={
-          config.title ?? (mode === "drives" ? "Recent drives" : "Recent charges")
+          config.title ??
+          (mode === "drives" ? "Recent drives" : "Recent charges")
         }
         initial={initial}
       />

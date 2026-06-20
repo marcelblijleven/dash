@@ -1,7 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { requireUserOr401 } from "@/lib/auth/current-user";
 import { TeslamatePostgresNotConfigured } from "@/lib/teslamate/postgres";
-import { getRecent, type RecentMode } from "@/lib/widgets/teslamate-recent/query";
+import {
+  getRecent,
+  type RecentMode,
+} from "@/lib/widgets/teslamate-recent/query";
 
 export const dynamic = "force-dynamic";
 

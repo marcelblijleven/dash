@@ -44,22 +44,3 @@ export async function WidgetGrid() {
     </div>
   );
 }
-
-function RenderedWidget({ widget }: { widget: WidgetConfig }) {
-  const Component = widgetRegistry[widget.type as WidgetType];
-  if (!Component) {
-    return (
-      <Card className="border-amber-500/30 bg-amber-500/5">
-        <CardContent className="p-4 text-sm">
-          <div className="font-medium text-amber-700 dark:text-amber-300">
-            Unknown widget
-          </div>
-          <div className="mt-1 font-mono text-xs text-muted-foreground">
-            type: {widget.type}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-  return <Component config={widget} />;
-}

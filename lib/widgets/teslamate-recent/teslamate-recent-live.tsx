@@ -61,7 +61,9 @@ function DriveRow({ drive }: { drive: RecentDrive }) {
   return (
     <li className="flex items-center justify-between gap-3 py-2">
       <div className="min-w-0">
-        <div className="truncate">{drive.endLabel ?? "Drive"}</div>
+        <div className="truncate" data-sensitive="">
+          {drive.endLabel ?? "Drive"}
+        </div>
         <div className="text-xs text-muted-foreground">
           {formatDateTime(drive.startedAt)}
           {drive.durationMin !== null &&
@@ -83,7 +85,9 @@ function ChargeRow({ charge }: { charge: RecentCharge }) {
   return (
     <li className="flex items-center justify-between gap-3 py-2">
       <div className="min-w-0">
-        <div className="truncate">{charge.label ?? "Charging"}</div>
+        <div className="truncate" data-sensitive="">
+          {charge.label ?? "Charging"}
+        </div>
         <div className="text-xs text-muted-foreground">
           {formatDateTime(charge.startedAt)}
           {socDelta && ` · ${socDelta}`}

@@ -18,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <Script src="/theme.js" />
+      <Script src="/sensitive.js" />
       <body className="min-h-dvh">
         <SiteHeader />
         <main className="mx-auto max-w-7xl px-6 py-8">

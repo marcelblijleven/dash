@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser, isAdmin } from "@/lib/auth/current-user";
+import { SensitiveToggle } from "./sensitive-toggle";
 import { DesktopNav, MobileMenu } from "./site-nav";
 import { ThemeToggle } from "./theme-toggle";
 import { Badge } from "./ui/badge";
@@ -33,6 +34,7 @@ export async function SiteHeader() {
               </span>
             </>
           )}
+          <SensitiveToggle />
           <ThemeToggle />
           <MobileMenu />
         </div>

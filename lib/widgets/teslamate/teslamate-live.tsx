@@ -103,7 +103,9 @@ function Body({ data }: { data: TeslaState }) {
         {data.geofence && (
           <>
             <dt className="text-muted-foreground">Location</dt>
-            <dd className="text-right">{data.geofence}</dd>
+            <dd className="text-right" data-sensitive="">
+              {data.geofence}
+            </dd>
           </>
         )}
         {data.state === "driving" && data.speed !== null && (

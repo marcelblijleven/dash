@@ -98,7 +98,8 @@ export default async function ContainerPage({
             </Badge>
           </div>
           <div className="mt-1 break-all font-mono text-xs text-muted-foreground">
-            {inspect.Config.Image} · {shortId(inspect.Id)}
+            <span data-sensitive="">{inspect.Config.Image}</span> ·{" "}
+            {shortId(inspect.Id)}
           </div>
         </div>
         <ContainerActions id={inspect.Id} running={inspect.State.Running} />
@@ -144,14 +145,22 @@ export default async function ContainerPage({
             <Field
               label="Networks"
               value={
-                Object.keys(inspect.NetworkSettings.Networks).join(", ") || "-"
+                <span data-sensitive="">
+                  {Object.keys(inspect.NetworkSettings.Networks).join(", ") ||
+                    "-"}
+                </span>
               }
             />
             <Field
               label="Command"
               value={
                 command ? (
-                  <code className="font-mono text-xs break-all">{command}</code>
+                  <code
+                    className="font-mono text-xs break-all"
+                    data-sensitive=""
+                  >
+                    {command}
+                  </code>
                 ) : (
                   "-"
                 )
@@ -177,7 +186,7 @@ export default async function ContainerPage({
                   className="grid grid-cols-[60px_1fr] gap-3"
                 >
                   <span className="text-muted-foreground">{m.Type}</span>
-                  <span className="break-all">
+                  <span className="break-all" data-sensitive="">
                     {m.Source} <span className="text-muted-foreground">→</span>{" "}
                     {m.Destination}
                     {!m.RW && (
@@ -207,7 +216,9 @@ export default async function ContainerPage({
                   className="grid grid-cols-1 gap-0.5 sm:grid-cols-[max-content_1fr] sm:gap-3"
                 >
                   <span className="break-all text-muted-foreground">{k}</span>
-                  <span className="break-all">{v}</span>
+                  <span className="break-all" data-sensitive="">
+                    {v}
+                  </span>
                 </div>
               ))}
             </div>

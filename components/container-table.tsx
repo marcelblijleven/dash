@@ -50,7 +50,7 @@ export function ContainerTable({ containers }: { containers: Container[] }) {
                 </Link>
               </TableCell>
               <TableCell className="hidden font-mono text-xs text-muted-foreground sm:table-cell">
-                {container.Image}
+                <span data-sensitive="">{container.Image}</span>
               </TableCell>
               <TableCell>
                 <Badge variant={variant}>{container.State}</Badge>

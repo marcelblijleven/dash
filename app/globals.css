@@ -47,3 +47,11 @@ body {
     "rlig" 1,
     "calt" 1;
 }
+
+/* Sensitive-info toggle: blur any element marked [data-sensitive] when the
+   user has enabled hide-sensitive mode (see SensitiveToggle in the header). */
+html[data-hide-sensitive] [data-sensitive] {
+  filter: blur(6px);
+  user-select: none;
+  transition: filter 150ms ease-out;
+}

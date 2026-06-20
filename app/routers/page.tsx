@@ -99,7 +99,9 @@ export default async function RoutersPage() {
                         ) : (
                           <div className="flex flex-wrap gap-1 font-mono">
                             {hosts.map((h) => (
-                              <span key={h}>{h}</span>
+                              <span key={h} data-sensitive="">
+                                {h}
+                              </span>
                             ))}
                           </div>
                         )}

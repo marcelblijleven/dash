@@ -1,6 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { getTeslaState } from "@/lib/teslamate/mqtt";
-import { resolveTeslamateConfig, type TeslamateWidgetConfig } from "./config";
+import {
+  getTeslaState,
+  TeslamateMqttNotConfigured,
+} from "@/lib/teslamate/mqtt";
+import { resolveCarId, type TeslamateWidgetConfig } from "./config";
 import { TeslamateLive } from "./teslamate-live";
 
 export async function TeslamateWidget({
@@ -8,26 +11,27 @@ export async function TeslamateWidget({
 }: {
   config: TeslamateWidgetConfig;
 }) {
-  const resolved = resolveTeslamateConfig(config);
-  if ("error" in resolved) {
-    return (
-      <Card className="h-full border-amber-500/30 bg-amber-500/5">
-        <CardContent className="p-4 text-sm">
-          <div className="font-medium text-amber-700 dark:text-amber-300">
-            Teslamate widget misconfigured
-          </div>
-          <div className="mt-1 font-mono text-xs text-muted-foreground">
-            {resolved.error}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const initial = await getTeslaState(resolved.connection, resolved.carId);
+  const carId = resolveCarId(config);
   const title = config.title ?? "";
 
-  return (
-    <TeslamateLive carId={resolved.carId} title={title} initial={initial} />
-  );
+  try {
+    const initial = await getTeslaState(carId);
+    return <TeslamateLive carId={carId} title={title} initial={initial} />;
+  } catch (e) {
+    if (e instanceof TeslamateMqttNotConfigured) {
+      return (
+        <Card className="h-full border-amber-500/30 bg-amber-500/5">
+          <CardContent className="p-4 text-sm">
+            <div className="font-medium text-amber-700 dark:text-amber-300">
+              Teslamate widget unavailable
+            </div>
+            <div className="mt-1 font-mono text-xs text-muted-foreground">
+              {e.message}
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
+    throw e;
+  }
 }

@@ -5,7 +5,7 @@
 #
 # Built-in widget types:
 #   host-stats             combined uptime, load, memory and CPU stats
-#   teslamate              battery, range, charging state from TeslaMate MQTT
+#   teslamate              battery, range, charging state (needs teslamate.mqtt)
 #   teslamate-stats        lifetime + 30-day km, kWh, cost (needs teslamate.postgres)
 #   teslamate-recent       last N drives or charges (needs teslamate.postgres)
 #   teslamate-efficiency   Wh/km sparkline over 30 days (needs teslamate.postgres)
@@ -13,13 +13,17 @@
 #
 # Sizes: small (1 col), medium (2 cols), large (3 cols or full row).
 
-# -- TeslaMate Postgres
+# -- TeslaMate
 #
-# Required for any teslamate-stats/recent/efficiency/cost widget. Reuses the
-# TeslaMate database directly.
+# Top-level connection settings shared by all teslamate widgets.
 # teslamate:
+#   mqtt:
+#     url: mqtt://mosquitto:1883        # required for the teslamate live widget
+#     username: ${MQTT_USERNAME}        # optional
+#     password: ${MQTT_PASSWORD}        # optional
+#     topic_prefix: teslamate           # default: "teslamate"
 #   postgres:
-#     host: teslamate-db
+#     host: teslamate-db                # required for teslamate-stats/recent/efficiency/cost
 #     port: 5432
 #     database: teslamate
 #     user: teslamate
@@ -32,11 +36,7 @@ widgets:
 
   # - type: teslamate
   #   size: medium
-  #   car_id: 1                          # TeslaMate car id (default: "1")
-  #   mqtt_url: mqtt://mosquitto:1883    # required
-  #   mqtt_username: ${MQTT_USERNAME}    # optional
-  #   mqtt_password: ${MQTT_PASSWORD}    # optional
-  #   topic_prefix: teslamate            # default: "teslamate"
+  #   car_id: 1     # TeslaMate car id (default: "1")
 
   # - type: teslamate-stats
   #   size: medium
@@ -55,4 +55,3 @@ widgets:
   # - type: teslamate-cost
   #   size: medium
   #   car_id: 1
-

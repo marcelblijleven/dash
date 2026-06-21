@@ -86,6 +86,51 @@ const TeslamateSchema = z
   })
   .prefault({});
 
+export const THEME_PRESETS = [
+  "orange",
+  "blue",
+  "green",
+  "purple",
+  "rose",
+  "mono",
+  "catppuccin",
+  "tokyo-night",
+  "dracula",
+  "nord",
+  "gruvbox",
+] as const;
+export type ThemePreset = (typeof THEME_PRESETS)[number];
+
+export const THEME_GLASS_LEVELS = [
+  "none",
+  "subtle",
+  "regular",
+  "clear",
+] as const;
+export type ThemeGlass = (typeof THEME_GLASS_LEVELS)[number];
+
+const ThemeSchema = z
+  .object({
+    preset: z
+      .enum(THEME_PRESETS)
+      .describe("Built-in palette. Defaults to 'orange'.")
+      .optional(),
+    primary: z
+      .string()
+      .min(1, "primary must be a non-empty CSS color")
+      .describe(
+        "Custom accent color (any CSS color: hex, rgb(), oklch(), ...). Overrides the preset.",
+      )
+      .optional(),
+    glass: z
+      .enum(THEME_GLASS_LEVELS)
+      .describe(
+        "Card glassiness. 'none' is solid (default). 'subtle' adds a light blur; 'regular' matches the Apple 'Regular' liquid-glass feel; 'clear' is the most transparent.",
+      )
+      .optional(),
+  })
+  .prefault({});
+
 const ShortCutSchema = z.object({
   name: z.string(),
   path: z.string(),
@@ -112,6 +157,7 @@ export const ConfigSchema = z.object({
   docker: DockerSchema,
   traefik: TraefikSchema,
   teslamate: TeslamateSchema,
+  theme: ThemeSchema,
   widgets: z.array(WidgetSchema).default([]),
   apps: z.array(AppSchema).default([]),
 });

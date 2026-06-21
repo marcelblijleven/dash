@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import type { WidgetConfig } from "@/lib/config/schema";
 import { ArrWidget } from "@/lib/widgets/arr";
+import { DockerStatsWidget } from "@/lib/widgets/docker-stats";
 import { HostChartWidget } from "@/lib/widgets/host-chart/host-chart";
 import {
   HostLoadWidget,
@@ -13,6 +14,7 @@ import { TeslamateCostWidget } from "@/lib/widgets/teslamate-cost";
 import { TeslamateEfficiencyWidget } from "@/lib/widgets/teslamate-efficiency";
 import { TeslamateRecentWidget } from "@/lib/widgets/teslamate-recent";
 import { TeslamateStatsWidget } from "@/lib/widgets/teslamate-stats";
+import { TraefikStatusWidget } from "@/lib/widgets/traefik-status";
 import type { WidgetType } from "@/lib/widgets/types";
 
 export type WidgetComponent = ComponentType<{ config: WidgetConfig }>;
@@ -29,4 +31,6 @@ export const widgetRegistry: Record<WidgetType, WidgetComponent> = {
   "teslamate-efficiency": TeslamateEfficiencyWidget,
   "teslamate-cost": TeslamateCostWidget,
   arr: ArrWidget,
+  "docker-stats": DockerStatsWidget,
+  "traefik-status": TraefikStatusWidget,
 };

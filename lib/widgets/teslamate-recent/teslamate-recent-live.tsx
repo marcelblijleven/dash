@@ -1,8 +1,10 @@
 "use client";
 
 import { RelativeTime } from "@/components/relative-time";
+import { Skeleton } from "@/components/ui/skeleton";
 import { WidgetCard } from "@/components/widget-card";
 import { usePoll } from "@/lib/widgets/teslamate-pg/use-poll";
+import { formatDateTime, formatDuration } from "./format";
 import type {
   RecentCharge,
   RecentDrive,
@@ -39,7 +41,11 @@ export function TeslamateRecentLive({
   return (
     <WidgetCard title={title} hint={hint}>
       {!data ? (
-        <div className="text-sm text-muted-foreground">loading…</div>
+        <div className="space-y-2">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </div>
       ) : data.length === 0 ? (
         <div className="text-sm text-muted-foreground">no recent {mode}</div>
       ) : (
@@ -103,21 +109,4 @@ function ChargeRow({ charge }: { charge: RecentCharge }) {
       </div>
     </li>
   );
-}
-
-function formatDuration(min: number): string {
-  if (min < 60) return `${min}m`;
-  const h = Math.floor(min / 60);
-  const m = min % 60;
-  return m === 0 ? `${h}h` : `${h}h ${m}m`;
-}
-
-function formatDateTime(iso: string): string {
-  const date = new Date(iso);
-  return date.toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 }

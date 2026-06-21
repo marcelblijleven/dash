@@ -4,6 +4,12 @@ import { RelativeTime } from "@/components/relative-time";
 import { Badge } from "@/components/ui/badge";
 import { WidgetCard } from "@/components/widget-card";
 import type { TeslaState } from "@/lib/teslamate/mqtt";
+import {
+  formatCharging,
+  formatClimate,
+  formatOdometer,
+  isActivelyReporting,
+} from "./format";
 import { useTeslaState } from "./use-tesla-state";
 
 export function TeslamateLive({
@@ -36,19 +42,6 @@ export function TeslamateLive({
     <WidgetCard title={displayTitle} hint={hint}>
       {data ? <Body data={data} /> : <Empty />}
     </WidgetCard>
-  );
-}
-
-function isActivelyReporting(state: string | null): boolean {
-  // Active = car is awake and pushing fresh data.
-  // Inactive (asleep/offline/suspended) = stored values from the last online
-  // session, no fresh telemetry coming in.
-  if (state === null) return true;
-  return (
-    state === "online" ||
-    state === "driving" ||
-    state === "charging" ||
-    state === "updating"
   );
 }
 
@@ -144,43 +137,6 @@ function StateLabel({ state }: { state: string | null }) {
           ? "text-muted-foreground"
           : "";
   return <span className={color}>{state}</span>;
-}
-
-function formatCharging(data: TeslaState): string {
-  const parts: string[] = [];
-  if (data.chargerPower !== null) parts.push(`${data.chargerPower} kW`);
-  if (data.timeToFullCharge !== null && data.timeToFullCharge > 0) {
-    // TeslaMate's time_to_full_charge is actually the time until the
-    // configured charge limit is reached, not a literal 100%. Reflect
-    // that target so a non-100% limit doesn't read as "to full".
-    const limit = data.chargeLimitSoc;
-    const target =
-      limit !== null && limit < 100 ? `to ${Math.round(limit)}%` : "to full";
-    parts.push(`${formatHours(data.timeToFullCharge)} ${target}`);
-  }
-  return parts.join(" · ") || (data.chargingState ?? "plugged in");
-}
-
-function formatHours(hours: number): string {
-  const totalMinutes = Math.round(hours * 60);
-  const h = Math.floor(totalMinutes / 60);
-  const m = totalMinutes % 60;
-  if (h === 0) return `${m}m`;
-  if (m === 0) return `${h}h`;
-  return `${h}h ${m}m`;
-}
-
-function formatClimate(data: TeslaState): string | null {
-  const inside =
-    data.insideTemp !== null ? `${data.insideTemp.toFixed(1)}° in` : null;
-  const outside =
-    data.outsideTemp !== null ? `${data.outsideTemp.toFixed(1)}° out` : null;
-  if (inside && outside) return `${inside} · ${outside}`;
-  return inside ?? outside;
-}
-
-function formatOdometer(km: number): string {
-  return `${Math.round(km).toLocaleString("en-US")} km`;
 }
 
 const CELL_COUNT = 10;

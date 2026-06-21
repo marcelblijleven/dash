@@ -88,7 +88,7 @@ type RawQueueRecord = {
 
 type RawQueueResponse = { records?: RawQueueRecord[] };
 
-function parseTimeleft(timeleft: string | undefined): number | null {
+export function parseTimeleft(timeleft: string | undefined): number | null {
   if (!timeleft) return null;
   // Servarr timeleft format: "HH:MM:SS" or "D.HH:MM:SS"
   const m = timeleft.match(/^(?:(\d+)\.)?(\d{1,2}):(\d{2}):(\d{2})$/);

@@ -1,6 +1,7 @@
 "use client";
 
 import { RelativeTime } from "@/components/relative-time";
+import { Skeleton } from "@/components/ui/skeleton";
 import { WidgetCard } from "@/components/widget-card";
 import { usePoll } from "@/lib/widgets/teslamate-pg/use-poll";
 import type { TeslaStats } from "./query";
@@ -34,7 +35,11 @@ export function TeslamateStatsLive({
       {data ? (
         <Body stats={data} />
       ) : (
-        <div className="text-sm text-muted-foreground">loading…</div>
+        <div className="grid grid-cols-3 gap-3">
+          <Skeleton className="h-14" />
+          <Skeleton className="h-14" />
+          <Skeleton className="h-14" />
+        </div>
       )}
     </WidgetCard>
   );

@@ -28,9 +28,7 @@ describe("ConfigSchema.theme", () => {
   });
 
   it("rejects an empty primary string", () => {
-    expect(() =>
-      ConfigSchema.parse({ theme: { primary: "" } }),
-    ).toThrow();
+    expect(() => ConfigSchema.parse({ theme: { primary: "" } })).toThrow();
   });
 
   it("accepts preset and primary together", () => {

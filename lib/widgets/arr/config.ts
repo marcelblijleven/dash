@@ -26,7 +26,9 @@ export function resolveArrConfig(
   config: ArrWidgetConfig,
 ): { connection: ArrConnection } | { error: string } {
   if (!config.service) {
-    return { error: "service is required (sonarr | radarr | lidarr | readarr)" };
+    return {
+      error: "service is required (sonarr | radarr | lidarr | readarr)",
+    };
   }
   if (!ARR_SERVICE_SET.has(config.service)) {
     return {

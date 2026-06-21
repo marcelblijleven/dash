@@ -1,9 +1,4 @@
-export const ARR_SERVICES = [
-  "sonarr",
-  "radarr",
-  "lidarr",
-  "readarr",
-] as const;
+export const ARR_SERVICES = ["sonarr", "radarr", "lidarr", "readarr"] as const;
 
 export type ArrService = (typeof ARR_SERVICES)[number];
 

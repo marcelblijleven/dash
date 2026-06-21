@@ -207,9 +207,9 @@ html[data-glass="clear"] *:where(.bg-card) {
   );
   box-shadow:
     inset 0 1px 0 0
-      color-mix(in oklab, white var(--glass-highlight, 0%), transparent),
+    color-mix(in oklab, white var(--glass-highlight, 0%), transparent),
     inset 0 -1px 0 0
-      color-mix(in oklab, black var(--glass-shadow, 0%), transparent);
+    color-mix(in oklab, black var(--glass-shadow, 0%), transparent);
 }
 
 html[data-glass="subtle"] {
@@ -349,4 +349,3 @@ html[data-hide-sensitive] [data-sensitive] {
 .animate-ping-sm {
   animation: ping-sm 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
-

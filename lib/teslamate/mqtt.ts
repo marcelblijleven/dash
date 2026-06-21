@@ -262,9 +262,7 @@ async function ensureBroker(): Promise<Broker> {
   return broker;
 }
 
-export async function getTeslaState(
-  carId: string,
-): Promise<TeslaState | null> {
+export async function getTeslaState(carId: string): Promise<TeslaState | null> {
   const broker = await ensureBroker();
   return broker.cars.get(carId) ?? null;
 }

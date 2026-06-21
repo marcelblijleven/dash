@@ -67,9 +67,7 @@ const TeslamatePostgresSchema = z
 
 const TeslamateMqttSchema = z
   .object({
-    url: z
-      .string()
-      .describe("MQTT broker URL (e.g. mqtt://mosquitto:1883)"),
+    url: z.string().describe("MQTT broker URL (e.g. mqtt://mosquitto:1883)"),
     username: z.string().optional(),
     password: PasswordField.optional(),
     topic_prefix: z

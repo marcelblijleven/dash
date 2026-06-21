@@ -9,7 +9,7 @@ export async function HostStatsWidget({ config }: { config: WidgetConfig }) {
     loadAvg: host?.loadAvg ?? null,
     memTotal: host?.memTotal ?? null,
     memAvailable: host?.memAvailable ?? null,
-    ncpu: 0, // TODO: get info from docker?
+    ncpu: null,
   };
 
   return <HostStatsLive title={config.title ?? "Host"} initial={initial} />;

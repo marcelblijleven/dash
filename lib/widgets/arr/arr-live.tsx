@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { RelativeTime } from "@/components/relative-time";
 import { WidgetCard } from "@/components/widget-card";
 import type {
@@ -7,7 +8,9 @@ import type {
   ArrQueueItem,
   ArrSnapshot,
 } from "@/lib/arr/types";
+import { Skeleton } from "@/components/ui/skeleton";
 import { formatBytes } from "@/lib/utils";
+import { formatAirDate, formatEta } from "./format";
 import { useArr } from "./use-arr";
 
 export function ArrLive({
@@ -36,7 +39,12 @@ export function ArrLive({
   return (
     <WidgetCard title={title} hint={hint}>
       {!data ? (
-        <div className="text-sm text-muted-foreground">loading…</div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
+        </div>
       ) : (
         <Body snapshot={data} limit={limit} />
       )}
@@ -85,14 +93,15 @@ function Section({
 }: {
   label: string;
   empty: string;
-  children: React.ReactNode[];
+  children: React.ReactNode;
 }) {
+  const isEmpty = React.Children.count(children) === 0;
   return (
     <div className="space-y-1">
       <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </div>
-      {children.length === 0 ? (
+      {isEmpty ? (
         <div className="text-sm text-muted-foreground">{empty}</div>
       ) : (
         <ul className="divide-y divide-border text-sm">{children}</ul>
@@ -151,46 +160,4 @@ function CalendarRow({ item }: { item: ArrCalendarItem }) {
       </div>
     </li>
   );
-}
-
-function formatEta(seconds: number): string {
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m`;
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return mins === 0 ? `${hours}h` : `${hours}h ${mins}m`;
-}
-
-function formatAirDate(iso: string): string {
-  if (!iso) return "-";
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "-";
-
-  const now = new Date();
-  const startOfToday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-  );
-  const startOfDate = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-  );
-  const dayDiff = Math.round(
-    (startOfDate.getTime() - startOfToday.getTime()) / 86400000,
-  );
-
-  const time = date.toLocaleTimeString(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  if (dayDiff === 0) return `today · ${time}`;
-  if (dayDiff === 1) return `tomorrow · ${time}`;
-  return date.toLocaleDateString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
 }

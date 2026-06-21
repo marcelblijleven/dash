@@ -10,6 +10,8 @@ export const WIDGET_TYPES = [
   "teslamate-efficiency",
   "teslamate-cost",
   "arr",
+  "docker-stats",
+  "traefik-status",
 ] as const;
 
 export type WidgetType = (typeof WIDGET_TYPES)[number];

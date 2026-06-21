@@ -1,8 +1,10 @@
 "use client";
 
 import { RelativeTime } from "@/components/relative-time";
+import { Skeleton } from "@/components/ui/skeleton";
 import { WidgetCard } from "@/components/widget-card";
 import { usePoll } from "@/lib/widgets/teslamate-pg/use-poll";
+import { formatMonth } from "./format";
 import type { CostData, CostMonth } from "./query";
 
 export function TeslamateCostLive({
@@ -33,7 +35,13 @@ export function TeslamateCostLive({
   return (
     <WidgetCard title={title} hint={hint}>
       {!data ? (
-        <div className="text-sm text-muted-foreground">loading…</div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-4/5" />
+          <Skeleton className="h-4 w-3/5" />
+          <Skeleton className="h-4 w-4/5" />
+          <Skeleton className="h-4 w-2/5" />
+        </div>
       ) : data.months.length === 0 ? (
         <div className="text-sm text-muted-foreground">
           no charging sessions recorded
@@ -123,10 +131,4 @@ function Legend() {
       </span>
     </div>
   );
-}
-
-function formatMonth(iso: string): string {
-  const [y, m] = iso.split("-");
-  const date = new Date(Number(y), Number(m) - 1, 1);
-  return date.toLocaleString(undefined, { month: "short", year: "2-digit" });
 }

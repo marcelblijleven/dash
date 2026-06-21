@@ -1,6 +1,7 @@
 "use client";
 
 import { RelativeTime } from "@/components/relative-time";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Sparkline } from "@/components/sparkline";
 import { WidgetCard } from "@/components/widget-card";
 import { usePoll } from "@/lib/widgets/teslamate-pg/use-poll";
@@ -34,7 +35,10 @@ export function TeslamateEfficiencyLive({
   return (
     <WidgetCard title={title} hint={hint}>
       {!data ? (
-        <div className="text-sm text-muted-foreground">loading…</div>
+        <div className="space-y-3">
+          <Skeleton className="h-8 w-2/5" />
+          <Skeleton className="h-10 w-full" />
+        </div>
       ) : data.points.length === 0 ? (
         <div className="text-sm text-muted-foreground">no drives recorded</div>
       ) : (

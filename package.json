@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "DASH_CONFIG=./config/config.yml DASH_PROC_ROOT=.dev/proc next dev",
     "build": "next build",
+    "build:schema": "tsx --tsconfig tsconfig.json scripts/build-schema.ts && pnpx @biomejs/biome format --write public/config.schema.json",
     "start": "next start",
     "lint": "pnpx @biomejs/biome lint",
     "lint:fix": "pnpx @biomejs/biome lint --write",
@@ -47,6 +48,7 @@
     "eslint-config-next": "16.2.7",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4",
+    "tsx": "^4.22.4",
     "typescript": "^5",
     "vitest": "^4.1.8"
   }

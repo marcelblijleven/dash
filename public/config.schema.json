@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "docker": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "proxy_url": {
+          "default": "http://dockersocket:2375",
+          "type": "string",
+          "description": "URL of your docker-socket-proxy"
+        }
+      }
+    },
+    "traefik": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "api_url": {
+          "default": "http://traefik:8080",
+          "type": "string",
+          "description": "Traefik API URL (must be reachable from dash)"
+        }
+      }
+    },
+    "teslamate": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "mqtt": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "MQTT broker URL (e.g. mqtt://mosquitto:1883)"
+            },
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string",
+              "minLength": 1
+            },
+            "topic_prefix": {
+              "default": "teslamate",
+              "type": "string",
+              "description": "Topic prefix TeslaMate publishes under"
+            }
+          },
+          "required": ["url"]
+        },
+        "postgres": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string",
+              "description": "TeslaMate Postgres host"
+            },
+            "port": {
+              "default": 5432,
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "database": {
+              "default": "teslamate",
+              "type": "string"
+            },
+            "user": {
+              "default": "teslamate",
+              "type": "string"
+            },
+            "password": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ssl": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          "required": ["host"]
+        }
+      }
+    },
+    "theme": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "preset": {
+          "type": "string",
+          "enum": [
+            "orange",
+            "blue",
+            "green",
+            "purple",
+            "rose",
+            "mono",
+            "catppuccin",
+            "tokyo-night",
+            "dracula",
+            "nord",
+            "gruvbox"
+          ],
+          "description": "Built-in palette. Defaults to 'orange'."
+        },
+        "primary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Custom accent color (any CSS color: hex, rgb(), oklch(), ...). Overrides the preset."
+        },
+        "glass": {
+          "type": "string",
+          "enum": ["none", "subtle", "regular", "clear"],
+          "description": "Card glassiness. 'none' is solid (default). 'subtle' adds a light blur; 'regular' matches the Apple 'Regular' liquid-glass feel; 'clear' is the most transparent."
+        }
+      }
+    },
+    "widgets": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "host-stats",
+              "host-chart",
+              "host-stat-load",
+              "host-stat-memory",
+              "host-stat-uptime",
+              "teslamate",
+              "teslamate-stats",
+              "teslamate-recent",
+              "teslamate-efficiency",
+              "teslamate-cost",
+              "arr",
+              "docker-stats",
+              "traefik-status"
+            ],
+            "description": "Widget type, determines which fields are valid for each widget."
+          },
+          "title": {
+            "type": "string"
+          },
+          "size": {
+            "default": "medium",
+            "type": "string",
+            "enum": ["small", "medium", "large"]
+          }
+        },
+        "required": ["type"],
+        "additionalProperties": {}
+      }
+    },
+    "apps": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Display name and search key"
+          },
+          "url": {
+            "type": "string",
+            "description": "Launch URL"
+          },
+          "local-url": {
+            "description": "Local network URL, used when on the same network",
+            "type": "string"
+          },
+          "icon": {
+            "description": "Icon name from selfh.st/icons or a full URL",
+            "type": "string"
+          },
+          "category": {
+            "description": "Category for grouping",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "shortcuts": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "path"]
+            }
+          }
+        },
+        "required": ["title", "url"]
+      }
+    }
+  }
+}

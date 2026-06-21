@@ -150,7 +150,13 @@ function formatCharging(data: TeslaState): string {
   const parts: string[] = [];
   if (data.chargerPower !== null) parts.push(`${data.chargerPower} kW`);
   if (data.timeToFullCharge !== null && data.timeToFullCharge > 0) {
-    parts.push(`${formatHours(data.timeToFullCharge)} to full`);
+    // TeslaMate's time_to_full_charge is actually the time until the
+    // configured charge limit is reached, not a literal 100%. Reflect
+    // that target so a non-100% limit doesn't read as "to full".
+    const limit = data.chargeLimitSoc;
+    const target =
+      limit !== null && limit < 100 ? `to ${Math.round(limit)}%` : "to full";
+    parts.push(`${formatHours(data.timeToFullCharge)} ${target}`);
   }
   return parts.join(" · ") || (data.chargingState ?? "plugged in");
 }
@@ -195,10 +201,19 @@ function BatteryBar({
 }) {
   const pct = Math.max(0, Math.min(100, percent ?? 0));
   const limitPct = limit !== null ? Math.max(0, Math.min(100, limit)) : null;
-  const filledCells = Math.round(pct / (100 / CELL_COUNT));
+  // Floor so a cell isn't shown as full until pct has actually crossed
+  // its boundary (e.g. 79% reads as 7 filled, not 8). The pinging next
+  // cell then represents the one currently filling up.
+  const filledCells = Math.floor(pct / (100 / CELL_COUNT));
   const limitCell =
     limitPct !== null ? Math.round(limitPct / (100 / CELL_COUNT)) : null;
-  const nextFillCell = charging ? Math.min(filledCells + 1, CELL_COUNT) : null;
+  // Charging never crosses the configured limit, so neither should the
+  // pulsing "next" indicator.
+  const maxCell = limitCell ?? CELL_COUNT;
+  const nextFillCell =
+    charging && filledCells < maxCell
+      ? Math.min(filledCells + 1, maxCell)
+      : null;
 
   return (
     <div

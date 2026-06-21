@@ -219,17 +219,21 @@ function BatteryBar({
           ? inLowZone
             ? "bg-red-500"
             : "bg-emerald-500"
-          : isLimit
-            ? "bg-sky-400/50 dark:bg-sky-400/40"
-            : "bg-muted-foreground/15";
+          : isNext
+            ? "bg-emerald-500/40"
+            : isLimit
+              ? "bg-sky-400/50 dark:bg-sky-400/40"
+              : "bg-muted-foreground/15";
 
         return (
           <div
             key={key}
-            className={`h-2 flex-1 rounded-[2px] transition-colors duration-300 ${color} ${
-              isNext ? "animate-pulse bg-emerald-500/30" : ""
-            }`}
-          />
+            className={`relative h-2 flex-1 rounded-[2px] transition-colors duration-300 ${color}`}
+          >
+            {isNext && (
+              <span className="absolute inset-0 rounded-[2px] bg-emerald-500/70 animate-ping-sm" />
+            )}
+          </div>
         );
       })}
     </div>

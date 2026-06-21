@@ -1,3 +1,27 @@
+# -- Theme
+#
+# Accent-only presets (just the accent color, neutral base unchanged):
+#   orange (default), blue, green, purple, rose, mono
+#
+# Full-palette presets (paired light + dark, the toggle still works):
+#   catppuccin     Latte / Mocha
+#   tokyo-night    Day / Night
+#   dracula        Alucard / Dracula
+#   nord           Snow Storm / Polar Night
+#   gruvbox        Light medium / Dark medium
+#
+# Optionally override the accent color with any CSS color value (hex,
+# rgb(), oklch(), ...). The custom value applies to both light and dark.
+#
+# Cards can also pick up a configurable backdrop blur ("glassiness").
+# Levels (none | subtle | regular | clear) loosely follow Apple's Liquid
+# Glass naming. The effect is automatically dropped when the user has
+# prefers-reduced-transparency set.
+# theme:
+#   preset: catppuccin
+#   primary: "#ff5733"
+#   glass: regular
+
 # -- Widgets
 #
 # Widgets to include in the dashboard, order of widgets here determine

@@ -26,6 +26,295 @@
   --primary-foreground: oklch(0.12 0 0);
 }
 
+/* Accent-only presets. Override --primary on top of the neutral base. */
+html[data-theme="blue"] {
+  --primary: oklch(0.6 0.18 250);
+}
+html[data-theme="blue"].dark {
+  --primary: oklch(0.72 0.16 250);
+}
+html[data-theme="green"] {
+  --primary: oklch(0.6 0.15 145);
+}
+html[data-theme="green"].dark {
+  --primary: oklch(0.72 0.15 145);
+}
+html[data-theme="purple"] {
+  --primary: oklch(0.55 0.2 290);
+}
+html[data-theme="purple"].dark {
+  --primary: oklch(0.7 0.18 290);
+}
+html[data-theme="rose"] {
+  --primary: oklch(0.6 0.2 10);
+}
+html[data-theme="rose"].dark {
+  --primary: oklch(0.72 0.18 10);
+}
+html[data-theme="mono"] {
+  --primary: oklch(0.45 0 0);
+  --primary-foreground: oklch(1 0 0);
+}
+html[data-theme="mono"].dark {
+  --primary: oklch(0.75 0 0);
+  --primary-foreground: oklch(0.12 0 0);
+}
+
+/* Full-palette presets. Light variant on :root[data-theme="x"], dark
+   variant on .dark[data-theme="x"]. A user-supplied theme.primary still
+   wins because it's an inline style on <html>. */
+
+/* Catppuccin: Latte (light) + Mocha (dark) */
+html[data-theme="catppuccin"] {
+  --background: #e6e9ef;
+  --foreground: #4c4f69;
+  --card: #eff1f5;
+  --card-foreground: #4c4f69;
+  --border: #ccd0da;
+  --muted: #ccd0da;
+  --muted-foreground: #6c6f85;
+  --primary: #8839ef;
+  --primary-foreground: #eff1f5;
+}
+html[data-theme="catppuccin"].dark {
+  --background: #1e1e2e;
+  --foreground: #cdd6f4;
+  --card: #313244;
+  --card-foreground: #cdd6f4;
+  --border: #45475a;
+  --muted: #313244;
+  --muted-foreground: #a6adc8;
+  --primary: #cba6f7;
+  --primary-foreground: #1e1e2e;
+}
+
+/* Tokyo Night: Day (light) + Night (dark) */
+html[data-theme="tokyo-night"] {
+  --background: #e1e2e7;
+  --foreground: #343b58;
+  --card: #ffffff;
+  --card-foreground: #343b58;
+  --border: #cbcdd3;
+  --muted: #d6d8e0;
+  --muted-foreground: #848cb5;
+  --primary: #2e7de9;
+  --primary-foreground: #e1e2e7;
+}
+html[data-theme="tokyo-night"].dark {
+  --background: #1a1b26;
+  --foreground: #c0caf5;
+  --card: #292e42;
+  --card-foreground: #c0caf5;
+  --border: #414868;
+  --muted: #292e42;
+  --muted-foreground: #a9b1d6;
+  --primary: #7aa2f7;
+  --primary-foreground: #1a1b26;
+}
+
+/* Dracula: Alucard (light) + Dracula (dark) */
+html[data-theme="dracula"] {
+  --background: #f1f1f0;
+  --foreground: #1f1f1f;
+  --card: #ffffff;
+  --card-foreground: #1f1f1f;
+  --border: #cfcfde;
+  --muted: #ececec;
+  --muted-foreground: #635d6f;
+  --primary: #644ac9;
+  --primary-foreground: #ffffff;
+}
+html[data-theme="dracula"].dark {
+  --background: #282a36;
+  --foreground: #f8f8f2;
+  --card: #44475a;
+  --card-foreground: #f8f8f2;
+  --border: #6272a4;
+  --muted: #44475a;
+  --muted-foreground: #c8cad6;
+  --primary: #bd93f9;
+  --primary-foreground: #282a36;
+}
+
+/* Nord: Snow Storm (light) + Polar Night (dark) */
+html[data-theme="nord"] {
+  --background: #eceff4;
+  --foreground: #2e3440;
+  --card: #ffffff;
+  --card-foreground: #2e3440;
+  --border: #d8dee9;
+  --muted: #e5e9f0;
+  --muted-foreground: #4c566a;
+  --primary: #5e81ac;
+  --primary-foreground: #eceff4;
+}
+html[data-theme="nord"].dark {
+  --background: #2e3440;
+  --foreground: #eceff4;
+  --card: #3b4252;
+  --card-foreground: #eceff4;
+  --border: #4c566a;
+  --muted: #3b4252;
+  --muted-foreground: #d8dee9;
+  --primary: #88c0d0;
+  --primary-foreground: #2e3440;
+}
+
+/* Gruvbox: Light medium + Dark medium */
+html[data-theme="gruvbox"] {
+  --background: #fbf1c7;
+  --foreground: #3c3836;
+  --card: #f9f5d7;
+  --card-foreground: #3c3836;
+  --border: #d5c4a1;
+  --muted: #ebdbb2;
+  --muted-foreground: #7c6f64;
+  --primary: #af3a03;
+  --primary-foreground: #fbf1c7;
+}
+html[data-theme="gruvbox"].dark {
+  --background: #282828;
+  --foreground: #ebdbb2;
+  --card: #3c3836;
+  --card-foreground: #ebdbb2;
+  --border: #504945;
+  --muted: #3c3836;
+  --muted-foreground: #a89984;
+  --primary: #fe8019;
+  --primary-foreground: #282828;
+}
+
+/* Glassiness on cards. Activated by theme.glass in config (data-glass on
+   <html>). Targets the Tailwind .bg-card utility, so any <Card> picks it
+   up automatically. The inner highlight + 1px accent ring evoke Apple's
+   layered Liquid Glass look without trying to imitate lensing. */
+html[data-glass="subtle"] *:where(.bg-card),
+html[data-glass="regular"] *:where(.bg-card),
+html[data-glass="clear"] *:where(.bg-card) {
+  background-color: color-mix(
+    in oklab,
+    var(--card) var(--glass-card-opacity, 100%),
+    transparent
+  );
+  backdrop-filter: blur(var(--glass-blur, 0px))
+    saturate(var(--glass-saturate, 100%));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 0px))
+    saturate(var(--glass-saturate, 100%));
+  border-color: color-mix(
+    in oklab,
+    var(--primary) var(--glass-ring, 0%),
+    var(--border)
+  );
+  box-shadow:
+    inset 0 1px 0 0
+    color-mix(in oklab, white var(--glass-highlight, 0%), transparent),
+    inset 0 -1px 0 0
+    color-mix(in oklab, black var(--glass-shadow, 0%), transparent);
+}
+
+html[data-glass="subtle"] {
+  --glass-card-opacity: 88%;
+  --glass-blur: 10px;
+  --glass-saturate: 140%;
+  --glass-highlight: 8%;
+  --glass-shadow: 4%;
+  --glass-ring: 12%;
+}
+
+html[data-glass="regular"] {
+  --glass-card-opacity: 70%;
+  --glass-blur: 18px;
+  --glass-saturate: 170%;
+  --glass-highlight: 14%;
+  --glass-shadow: 8%;
+  --glass-ring: 22%;
+}
+
+html[data-glass="clear"] {
+  --glass-card-opacity: 50%;
+  --glass-blur: 28px;
+  --glass-saturate: 200%;
+  --glass-highlight: 22%;
+  --glass-shadow: 12%;
+  --glass-ring: 32%;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: transparent;
+  color: var(--foreground);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
+}
+
+/* Decorative halo painted directly on body so the backdrop blur on cards
+   has something to pick up. Body itself is transparent, so this sits on
+   top of the html background color and ends up in the cards' backdrop
+   chain. Only painted when glass is enabled. */
+html[data-glass="subtle"] body {
+  background:
+    radial-gradient(
+      60vmax 50vmax at 12% 10%,
+      color-mix(in oklab, var(--primary) 30%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      55vmax 45vmax at 95% 90%,
+      color-mix(in oklab, var(--primary) 22%, transparent),
+      transparent 65%
+    );
+  background-attachment: fixed;
+}
+html[data-glass="regular"] body {
+  background:
+    radial-gradient(
+      60vmax 50vmax at 12% 10%,
+      color-mix(in oklab, var(--primary) 45%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      55vmax 45vmax at 95% 90%,
+      color-mix(in oklab, var(--primary) 35%, transparent),
+      transparent 65%
+    );
+  background-attachment: fixed;
+}
+html[data-glass="clear"] body {
+  background:
+    radial-gradient(
+      60vmax 50vmax at 12% 10%,
+      color-mix(in oklab, var(--primary) 60%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      55vmax 45vmax at 95% 90%,
+      color-mix(in oklab, var(--primary) 50%, transparent),
+      transparent 65%
+    );
+  background-attachment: fixed;
+}
+
+/* Respect user accessibility preference: drop the blur, halo, and ring
+   tinting, matching the Liquid Glass Reduced Transparency behavior. */
+@media (prefers-reduced-transparency: reduce) {
+  html[data-glass] *:where(.bg-card) {
+    background-color: var(--card);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: var(--border);
+    box-shadow: none;
+  }
+  html[data-glass] body {
+    background: transparent;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -38,20 +327,25 @@
   --color-primary-foreground: var(--primary-foreground);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-feature-settings:
-    "rlig" 1,
-    "calt" 1;
-}
-
 /* Sensitive-info toggle: blur any element marked [data-sensitive] when the
    user has enabled hide-sensitive mode (see SensitiveToggle in the header). */
 html[data-hide-sensitive] [data-sensitive] {
   filter: blur(6px);
   user-select: none;
   transition: filter 150ms ease-out;
+}
+
+/* Smaller variant of Tailwind's animate-ping — same easing and duration,
+   just doesn't scale all the way to 2x. Used on the next-to-fill battery
+   cell so the radar blip stays roughly within the cell bounds. */
+@keyframes ping-sm {
+  75%,
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+.animate-ping-sm {
+  animation: ping-sm 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }

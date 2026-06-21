@@ -46,7 +46,9 @@ async function arrFetch<T>(
       cache: "no-store",
     });
     if (!res.ok) {
-      throw new Error(`${conn.service} ${path} → ${res.status} ${res.statusText}`);
+      throw new Error(
+        `${conn.service} ${path} → ${res.status} ${res.statusText}`,
+      );
     }
     return (await res.json()) as T;
   } finally {
@@ -232,7 +234,9 @@ export async function getArrSnapshot(
 
   return {
     service: conn.service,
-    queue: (queue.records ?? []).map((r) => normalizeQueueItem(conn.service, r)),
+    queue: (queue.records ?? []).map((r) =>
+      normalizeQueueItem(conn.service, r),
+    ),
     calendar: calendar.map((r) => normalizeCalendarItem(conn.service, r)),
   };
 }

@@ -17,7 +17,6 @@ const PRESETS = [
 
 type Preset = (typeof PRESETS)[number];
 
-const N = PRESETS.length;
 const MEM_TOTAL = 32 * 1024 * 1024 * 1024;
 
 function buildSamples(now: number) {
@@ -136,21 +135,30 @@ for (const preset of PRESETS) {
   }
 }
 
+// Full-palette presets only for the composite — accent-only presets look too similar.
+const COMPOSITE_PRESETS = [
+  "catppuccin",
+  "tokyo-night",
+  "dracula",
+  "nord",
+  "gruvbox",
+] as const satisfies readonly Preset[];
+const NC = COMPOSITE_PRESETS.length;
+
 // Single composite: diagonal strips, light on top half, dark on bottom half.
-// Each theme i occupies a forward-slash "/" angled parallelogram strip.
-// Out-of-bounds polygon vertices are clipped by the browser to the element edge,
-// so no gap-filling or special-casing is needed for the first/last strips.
+// First strip's bottom-left is clamped to 0, last strip's bottom-right to W,
+// so the canvas is fully covered with no corner gaps.
 test("compose themes-preview diagonal", async ({ page }) => {
   const W = 1440;
   const H = 300; // height of each section (light / dark)
-  const D = 80; // horizontal drift (px) from top to bottom of each strip
-  const step = W / N;
+  const D = 120; // horizontal drift (px) from top to bottom of each strip
+  const step = W / NC;
 
   function clip(i: number): string {
     const x0t = Math.round(i * step);
     const x1t = Math.round((i + 1) * step);
-    const x0b = Math.round(i * step + D);
-    const x1b = Math.round((i + 1) * step + D);
+    const x0b = i === 0 ? 0 : Math.round(i * step + D);
+    const x1b = i === NC - 1 ? W : Math.round((i + 1) * step + D);
     return `polygon(${x0t}px 0,${x1t}px 0,${x1b}px ${H}px,${x0b}px ${H}px)`;
   }
 
@@ -158,7 +166,7 @@ test("compose themes-preview diagonal", async ({ page }) => {
     `position:absolute;top:${top}px;left:0;width:${W}px;height:${H}px;` +
     `object-fit:cover;object-position:top left;clip-path:${c}`;
 
-  const imgs = PRESETS.flatMap((preset, i) => {
+  const imgs = COMPOSITE_PRESETS.flatMap((preset, i) => {
     const c = clip(i);
     const lb64 = readFileSync(`${VIEWPORT_DIR}/${preset}-light.png`).toString(
       "base64",

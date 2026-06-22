@@ -1,5 +1,7 @@
 # dash
 
+<img src="docs/screenshot.png" alt="dash screenshot" width="900">
+
 A self-hosted homelab dashboard built with Next.js. Discovers services from Docker labels and Traefik routes, and displays configurable widgets for host metrics, media, and smart home data.
 
 ## Features
@@ -47,6 +49,10 @@ theme:
 **Accent-only presets** (neutral base unchanged): `orange` (default), `blue`, `green`, `purple`, `rose`, `mono`
 
 **Full-palette presets** (paired light + dark, toggle still works): `catppuccin`, `tokyo-night`, `dracula`, `nord`, `gruvbox`
+
+<img src="docs/themes-preview.png" alt="all theme presets" width="900">
+
+Individual theme screenshots (light mode) are in [`docs/themes/`](docs/themes/).
 
 **Glass levels**: `none` (solid, default), `subtle`, `regular`, `clear` - automatically removed when the user has `prefers-reduced-transparency` set.
 

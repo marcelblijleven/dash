@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "screenshots": "pnpm build && playwright test --config=playwright.screenshots.config.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

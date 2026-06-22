@@ -17,6 +17,7 @@ const PRESETS = [
 
 type Preset = (typeof PRESETS)[number];
 
+const N = PRESETS.length;
 const MEM_TOTAL = 32 * 1024 * 1024 * 1024;
 
 function buildSamples(now: number) {
@@ -47,7 +48,6 @@ async function setupMocks(page: import("@playwright/test").Page, now: number) {
     ncpu: 8,
     samples: buildSamples(now),
   };
-
   await page.route("/api/widgets/host-stats", (r) =>
     r.fulfill({
       status: 200,
@@ -113,66 +113,77 @@ const VIEWPORT_DIR = "/tmp/dash-viewports";
 
 test.beforeAll(() => {
   mkdirSync(VIEWPORT_DIR, { recursive: true });
+  mkdirSync("docs/themes", { recursive: true });
 });
 
-// Viewport screenshots for all light-mode themes (used for the composite grid).
+// Viewport screenshots for all themes × both modes.
+// Light shots are also saved to docs/themes/ for the README.
 for (const preset of PRESETS) {
-  test(`viewport · ${preset} · light`, async ({ page }) => {
-    await setupMocks(page, Date.now());
-    await navigateWithTheme(page, preset, "light");
-    await page.screenshot({
-      path: `${VIEWPORT_DIR}/${preset}-light.png`,
-      fullPage: false,
+  for (const mode of ["light", "dark"] as const) {
+    test(`viewport · ${preset} · ${mode}`, async ({ page }) => {
+      await setupMocks(page, Date.now());
+      await navigateWithTheme(page, preset, mode);
+      const tmp = `${VIEWPORT_DIR}/${preset}-${mode}.png`;
+      await page.screenshot({ path: tmp, fullPage: false });
+      if (mode === "light") {
+        // Copy into docs/themes/ directly from the page for repo inclusion.
+        await page.screenshot({
+          path: `docs/themes/${preset}-light.png`,
+          fullPage: false,
+        });
+      }
     });
-  });
+  }
 }
 
-// Composite "all themes" preview grid built from the viewport shots above.
-// This test must run after all viewport shots are taken.
-test("compose themes-preview grid", async ({ page }) => {
-  const COLS = 4;
-  const THUMB_W = 360;
-  const THUMB_H = 225;
-  const GAP = 4;
+// Single composite: diagonal strips, light on top half, dark on bottom half.
+// Each theme i occupies a forward-slash "/" angled parallelogram strip.
+// Out-of-bounds polygon vertices are clipped by the browser to the element edge,
+// so no gap-filling or special-casing is needed for the first/last strips.
+test("compose themes-preview diagonal", async ({ page }) => {
+  const W = 1440;
+  const H = 300; // height of each section (light / dark)
+  const D = 80; // horizontal drift (px) from top to bottom of each strip
+  const step = W / N;
 
-  const rows = Math.ceil(PRESETS.length / COLS);
-  const canvasW = COLS * THUMB_W + (COLS - 1) * GAP;
-  const canvasH = rows * THUMB_H + (rows - 1) * GAP;
+  function clip(i: number): string {
+    const x0t = Math.round(i * step);
+    const x1t = Math.round((i + 1) * step);
+    const x0b = Math.round(i * step + D);
+    const x1b = Math.round((i + 1) * step + D);
+    return `polygon(${x0t}px 0,${x1t}px 0,${x1b}px ${H}px,${x0b}px ${H}px)`;
+  }
 
-  const images: { preset: string; b64: string }[] = PRESETS.map((preset) => ({
-    preset,
-    b64: readFileSync(`${VIEWPORT_DIR}/${preset}-light.png`).toString("base64"),
-  }));
+  const imgStyle = (top: number, c: string) =>
+    `position:absolute;top:${top}px;left:0;width:${W}px;height:${H}px;` +
+    `object-fit:cover;object-position:top left;clip-path:${c}`;
 
-  const imgTags = images
-    .map(({ preset, b64 }, i) => {
-      const col = i % COLS;
-      const row = Math.floor(i / COLS);
-      const x = col * (THUMB_W + GAP);
-      const y = row * (THUMB_H + GAP);
-      return `<img src="data:image/png;base64,${b64}" data-theme="${preset}"
-          style="position:absolute;left:${x}px;top:${y}px;width:${THUMB_W}px;height:${THUMB_H}px;object-fit:cover;object-position:top left;">`;
-    })
-    .join("\n");
+  const imgs = PRESETS.flatMap((preset, i) => {
+    const c = clip(i);
+    const lb64 = readFileSync(`${VIEWPORT_DIR}/${preset}-light.png`).toString(
+      "base64",
+    );
+    const db64 = readFileSync(`${VIEWPORT_DIR}/${preset}-dark.png`).toString(
+      "base64",
+    );
+    return [
+      `<img src="data:image/png;base64,${lb64}" style="${imgStyle(0, c)}">`,
+      `<img src="data:image/png;base64,${db64}" style="${imgStyle(H, c)}">`,
+    ];
+  }).join("\n");
 
   const html = `<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
+<head><meta charset="utf-8">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #111; width: ${canvasW}px; height: ${canvasH}px; overflow: hidden; }
-  .grid { position: relative; width: ${canvasW}px; height: ${canvasH}px; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:${W}px;height:${H * 2}px;overflow:hidden;background:#000}
 </style>
 </head>
-<body>
-<div class="grid">
-${imgTags}
-</div>
-</body>
+<body>${imgs}</body>
 </html>`;
 
-  await page.setViewportSize({ width: canvasW, height: canvasH });
+  await page.setViewportSize({ width: W, height: H * 2 });
   await page.setContent(html, { waitUntil: "networkidle" });
   await page.waitForTimeout(400);
 
@@ -180,7 +191,7 @@ ${imgTags}
   await page.screenshot({ path: "docs/themes-preview.png", fullPage: false });
 });
 
-// Orange-light viewport screenshot — the README hero.
+// Orange-light viewport — README hero.
 test("hero · orange · light", async ({ page }) => {
   await setupMocks(page, Date.now());
   await navigateWithTheme(page, "orange", "light");

@@ -1,0 +1,38 @@
+docker:
+  proxy_url: http://localhost:9876
+
+traefik:
+  api_url: http://localhost:9876
+
+widgets:
+  - type: host-stats
+    size: medium
+
+  - type: docker-stats
+    size: small
+    title: Docker
+
+  - type: traefik-status
+    size: small
+    title: Traefik
+
+  - type: host-chart
+    metric: load
+    size: large
+
+  - type: host-chart
+    metric: memory
+    size: large
+
+apps:
+  - title: Gitea
+    url: https://git.homelab.local
+    icon: gitea
+    category: Development
+    description: Self-hosted Git service
+
+  - title: Code Server
+    url: https://code.homelab.local
+    icon: code-server
+    category: Development
+    description: VS Code in the browser

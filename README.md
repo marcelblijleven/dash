@@ -1,5 +1,7 @@
 # dash
 
+<img src="docs/screenshot.png" alt="dash screenshot" width="900">
+
 A self-hosted homelab dashboard built with Next.js. Discovers services from Docker labels and Traefik routes, and displays configurable widgets for host metrics, media, and smart home data.
 
 ## Features

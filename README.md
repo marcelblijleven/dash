@@ -50,6 +50,10 @@ theme:
 
 **Full-palette presets** (paired light + dark, toggle still works): `catppuccin`, `tokyo-night`, `dracula`, `nord`, `gruvbox`
 
+<img src="docs/themes-preview.png" alt="all theme presets" width="900">
+
+Individual theme screenshots (light mode) are in [`docs/themes/`](docs/themes/).
+
 **Glass levels**: `none` (solid, default), `subtle`, `regular`, `clear` - automatically removed when the user has `prefers-reduced-transparency` set.
 
 ### Apps

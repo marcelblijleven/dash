@@ -5,7 +5,7 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: "**/screenshots.spec.ts",
+  testMatch: "**/{screenshots,docs-images}.spec.ts",
   fullyParallel: false,
   workers: 1,
   reporter: [

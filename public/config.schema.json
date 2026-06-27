@@ -136,6 +136,12 @@
               "teslamate-recent",
               "teslamate-efficiency",
               "teslamate-cost",
+              "teslamate-battery",
+              "teslamate-charge-curve",
+              "teslamate-performance",
+              "teslamate-tpms",
+              "teslamate-odometer",
+              "teslamate-location",
               "arr",
               "docker-stats",
               "traefik-status"

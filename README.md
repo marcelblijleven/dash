@@ -248,6 +248,66 @@ Monthly charging cost split by home and public charging. Requires `teslamate.pos
   car_id: 1
 ```
 
+#### `teslamate-battery`
+
+Battery health: rated range projected to 100% over time, with degradation versus the best recorded range. Requires `teslamate.postgres`.
+
+```yaml
+- type: teslamate-battery
+  size: medium
+  car_id: 1
+```
+
+#### `teslamate-charge-curve`
+
+Power-vs-state-of-charge curve for the most recent charging session, with peak kW. Requires `teslamate.postgres`.
+
+```yaml
+- type: teslamate-charge-curve
+  size: medium
+  car_id: 1
+```
+
+#### `teslamate-performance`
+
+Top speed, peak power, and longest drive over the last 30 days. Requires `teslamate.postgres`.
+
+```yaml
+- type: teslamate-performance
+  size: medium
+  car_id: 1
+```
+
+#### `teslamate-tpms`
+
+Latest tyre pressure reading per corner, in bar. Requires `teslamate.postgres`.
+
+```yaml
+- type: teslamate-tpms
+  size: medium
+  car_id: 1
+```
+
+#### `teslamate-odometer`
+
+Current odometer reading. Requires `teslamate.postgres`.
+
+```yaml
+- type: teslamate-odometer
+  size: small
+  car_id: 1
+```
+
+#### `teslamate-location`
+
+Last known position with a map link, battery level, and outside temperature. Requires `teslamate.postgres`.
+
+```yaml
+- type: teslamate-location
+  size: medium
+  car_id: 1
+```
+
 ## Docker label auto-discovery
 
 Dash can auto-discover services by reading Docker container labels. Labels use the `dash.` prefix.

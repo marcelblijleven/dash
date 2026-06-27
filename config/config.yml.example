@@ -36,6 +36,12 @@
 #   teslamate-recent       last N drives or charges (needs teslamate.postgres)
 #   teslamate-efficiency   Wh/km sparkline over 30 days (needs teslamate.postgres)
 #   teslamate-cost         monthly cost split home/public (needs teslamate.postgres)
+#   teslamate-battery      rated range / battery degradation (needs teslamate.postgres)
+#   teslamate-charge-curve power vs SoC for the last charge (needs teslamate.postgres)
+#   teslamate-performance  top speed / peak power / longest drive (needs teslamate.postgres)
+#   teslamate-tpms         latest tyre pressures (needs teslamate.postgres)
+#   teslamate-odometer     current odometer reading (needs teslamate.postgres)
+#   teslamate-location     last known position + map link (needs teslamate.postgres)
 #   arr                    queue + upcoming calendar for sonarr/radarr/lidarr/readarr
 #
 # Sizes: small (1 col), medium (2 cols), large (3 cols or full row).
@@ -80,6 +86,30 @@ widgets:
   #   car_id: 1
 
   # - type: teslamate-cost
+  #   size: medium
+  #   car_id: 1
+
+  # - type: teslamate-battery
+  #   size: medium
+  #   car_id: 1
+
+  # - type: teslamate-charge-curve
+  #   size: medium
+  #   car_id: 1
+
+  # - type: teslamate-performance
+  #   size: medium
+  #   car_id: 1
+
+  # - type: teslamate-tpms
+  #   size: medium
+  #   car_id: 1
+
+  # - type: teslamate-odometer
+  #   size: small
+  #   car_id: 1
+
+  # - type: teslamate-location
   #   size: medium
   #   car_id: 1
 

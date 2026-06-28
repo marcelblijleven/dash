@@ -144,7 +144,11 @@
               "teslamate-location",
               "arr",
               "docker-stats",
-              "traefik-status"
+              "docker-containers",
+              "docker-top",
+              "traefik-status",
+              "dns-stats",
+              "download-client"
             ],
             "description": "Widget type, determines which fields are valid for each widget."
           },

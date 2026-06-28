@@ -146,6 +146,27 @@ docker:
   proxy_url: http://dockersocket:2375   # default
 ```
 
+### `docker-containers`
+
+Lists individual containers with a status dot, sorted so unhealthy and stopped containers appear first. Reuses the same Docker socket proxy as `docker-stats`.
+
+```yaml
+- type: docker-containers
+  size: medium
+  limit: 8                     # number of containers to show (1-50, default 8)
+```
+
+### `docker-top`
+
+Ranks running containers by resource usage so the heaviest ones surface first, each with a CPU/memory bar. Reuses the same Docker socket proxy as `docker-stats`. CPU percentages are sampled per poll, so the first render may take a second or two on hosts with many containers.
+
+```yaml
+- type: docker-top
+  size: medium
+  sort: cpu                    # cpu | memory (default cpu)
+  limit: 5                     # number of containers to show (1-50, default 5)
+```
+
 ### `traefik-status`
 
 Shows total router count, enabled routers, and services that are down. Requires Traefik API access.
@@ -174,6 +195,55 @@ Queue depth and upcoming calendar for Sonarr, Radarr, Lidarr, or Readarr.
   api_key: ${SONARR_API_KEY}
   title: TV                    # optional, defaults to capitalised service name
   limit: 3                     # number of upcoming items to show (1-50, default 3)
+```
+
+### `dns-stats`
+
+Query and block statistics for Pi-hole or AdGuard Home.
+
+Pi-hole (v6). The password is the web interface or app password; omit it if your Pi-hole has no password set:
+
+```yaml
+- type: dns-stats
+  size: small
+  provider: pihole             # pihole | adguard
+  url: http://pi.hole
+  password: ${PIHOLE_PASSWORD}   # optional
+```
+
+AdGuard Home uses HTTP basic auth:
+
+```yaml
+- type: dns-stats
+  size: small
+  provider: adguard
+  url: http://adguard:3000
+  username: admin
+  password: ${ADGUARD_PASSWORD}
+```
+
+### `download-client`
+
+Global download speed and active transfers for qBittorrent, SABnzbd, or NZBGet.
+
+```yaml
+- type: download-client
+  size: medium
+  client: qbittorrent          # qbittorrent | sabnzbd | nzbget
+  url: http://qbittorrent:8080
+  username: admin              # qbittorrent / nzbget; omit if auth is bypassed
+  password: ${QBIT_PASSWORD}
+  limit: 5                     # number of active downloads to show (1-50, default 5)
+```
+
+SABnzbd authenticates with an API key instead:
+
+```yaml
+- type: download-client
+  size: medium
+  client: sabnzbd
+  url: http://sabnzbd:8080
+  api_key: ${SABNZBD_API_KEY}
 ```
 
 ### TeslaMate widgets

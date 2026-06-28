@@ -17,7 +17,11 @@ export const WIDGET_TYPES = [
   "teslamate-location",
   "arr",
   "docker-stats",
+  "docker-containers",
+  "docker-top",
   "traefik-status",
+  "dns-stats",
+  "download-client",
 ] as const;
 
 export type WidgetType = (typeof WIDGET_TYPES)[number];

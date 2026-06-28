@@ -1,7 +1,11 @@
 import type { ComponentType } from "react";
 import type { WidgetConfig } from "@/lib/config/schema";
 import { ArrWidget } from "@/lib/widgets/arr";
+import { DockerContainersWidget } from "@/lib/widgets/docker-containers";
 import { DockerStatsWidget } from "@/lib/widgets/docker-stats";
+import { DockerTopWidget } from "@/lib/widgets/docker-top";
+import { DnsStatsWidget } from "@/lib/widgets/dns-stats";
+import { DownloadClientWidget } from "@/lib/widgets/download-client";
 import { HostChartWidget } from "@/lib/widgets/host-chart/host-chart";
 import {
   HostLoadWidget,
@@ -44,5 +48,9 @@ export const widgetRegistry: Record<WidgetType, WidgetComponent> = {
   "teslamate-location": TeslamateLocationWidget,
   arr: ArrWidget,
   "docker-stats": DockerStatsWidget,
+  "docker-containers": DockerContainersWidget,
+  "docker-top": DockerTopWidget,
   "traefik-status": TraefikStatusWidget,
+  "dns-stats": DnsStatsWidget,
+  "download-client": DownloadClientWidget,
 };

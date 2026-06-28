@@ -43,6 +43,11 @@
 #   teslamate-odometer     current odometer reading (needs teslamate.postgres)
 #   teslamate-location     last known position + map link (needs teslamate.postgres)
 #   arr                    queue + upcoming calendar for sonarr/radarr/lidarr/readarr
+#   docker-stats           total / running / unhealthy container counts (needs docker)
+#   docker-containers      container list sorted by health (needs docker)
+#   docker-top             running containers ranked by cpu or memory usage (needs docker)
+#   dns-stats              query + block stats for pi-hole or adguard home
+#   download-client        speed + active transfers for qbittorrent/sabnzbd/nzbget
 #
 # Sizes: small (1 col), medium (2 cols), large (3 cols or full row).
 
@@ -119,3 +124,57 @@ widgets:
   #   url: http://sonarr:8989          # required
   #   api_key: ${SONARR_API_KEY}       # required
   #   title: TV                        # optional, defaults to capitalised service name
+
+  # The docker widgets below all use the Docker socket proxy configured under
+  # the top-level `docker` key (see docker.proxy_url at the bottom of the file).
+
+  # - type: docker-stats
+  #   size: small                      # total / running / unhealthy counts
+
+  # - type: docker-containers
+  #   size: medium
+  #   limit: 8                         # containers to show (1-50, default 8)
+
+  # Ranks running containers by resource usage.
+  # - type: docker-top
+  #   size: medium
+  #   sort: cpu                        # cpu | memory (default cpu)
+  #   limit: 5                         # number of containers to show (1-50, default 5)
+
+  # Pi-hole (v6). password is the web/app password; omit if none is set.
+  # - type: dns-stats
+  #   size: small
+  #   provider: pihole                 # pihole | adguard
+  #   url: http://pi.hole
+  #   password: ${PIHOLE_PASSWORD}     # optional for pihole
+
+  # AdGuard Home uses HTTP basic auth (username + password both required).
+  # - type: dns-stats
+  #   size: small
+  #   provider: adguard
+  #   url: http://adguard:3000
+  #   username: admin
+  #   password: ${ADGUARD_PASSWORD}
+
+  # qBittorrent / NZBGet authenticate with username + password.
+  # - type: download-client
+  #   size: medium
+  #   client: qbittorrent              # qbittorrent | sabnzbd | nzbget
+  #   url: http://qbittorrent:8080
+  #   username: admin                  # omit if auth is bypassed
+  #   password: ${QBIT_PASSWORD}
+  #   limit: 5                         # active downloads to show (1-50, default 5)
+
+  # SABnzbd authenticates with an API key instead.
+  # - type: download-client
+  #   size: medium
+  #   client: sabnzbd
+  #   url: http://sabnzbd:8080
+  #   api_key: ${SABNZBD_API_KEY}
+
+# -- Docker
+#
+# Socket proxy used by the docker-stats, docker-containers and docker-top
+# widgets. Point this at a read-only proxy such as tecnativa/docker-socket-proxy.
+# docker:
+#   proxy_url: http://dockersocket:2375   # default
